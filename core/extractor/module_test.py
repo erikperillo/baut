@@ -1,2 +1,1 @@
-import benchmark
 import extractor
