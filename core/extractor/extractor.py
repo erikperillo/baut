@@ -16,5 +16,5 @@ class Extractor:
           process = subprocess.Popen(self.filter_script, stdin=source.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
           stdout,stderr = process.communicate()
           if stderr != "":
-               raise exceptions.FilteringException("stderr is not empty") 
+               raise exceptions.ExtractingError("stderr is not empty")
           return stdout 
