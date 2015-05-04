@@ -1,4 +1,4 @@
-import subprocess
+import subprocess as sp
 import exceptions
 
 class Extractor:
@@ -8,12 +8,12 @@ class Extractor:
           self.source = None
 
      def extract(self, key):
-          self.source = subprocess.Popen([self.run_script,key], stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
+          self.source = sp.Popen([self.run_script,key], stdout=sp.PIPE, stderr=sp.PIPE) 
 
      def filter(self, source=None):
           if source == None:
                source = self.source
-          process = subprocess.Popen(self.filter_script, stdin=source.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
+          process = sp.Popen(self.filter_script, stdin=source.stdout, stdout=sp.PIPE, stderr=sp.PIPE) 
           stdout,stderr = process.communicate()
           if stderr != "":
                raise exceptions.ExtractingError("stderr is not empty")

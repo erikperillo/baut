@@ -1,23 +1,18 @@
-import core.benchmark as bm
-import core.extractor as ext
+import core.app as app
 import tools.oarg as oarg
 import subprocess as sp
 
-
-app = oarg.Oarg(str,"-a --app","","app to measure time",1)
-help = oarg.Oarg(bool,"-h --help",False,"this help message")
-
-oarg.parse()
-
-if help.wasFound() or not app.wasFound():
-     oarg.describeArgs("available options:")     
-     exit()
-
-app = bm.App(app.getVal())
-
-app.run()
-#f = open("erik","w")
-
-import sys
-
-app.dump(sys.stdout)
+appl = app.App(key="ls")
+print "ctor()"
+appl.run()
+print "run()"
+#appl.dump()
+#print "dump()"
+ext = app.Extractor("exts/timer/time_filter.sh",key="exts/timer/time_runner.sh")
+print "ext.ctor()"
+ext.run([appl.key,"-l"])
+print "ext.run()"
+ext.filter()
+print "ext.filter()"
+ext.dump()
+print "ext.dump()"
