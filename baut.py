@@ -1,9 +1,10 @@
-import oarg
+import tools.oarg as oarg
 import core.app as app
 import subprocess as sp
 
-TOOLS_DIR = "tools"
-DEF_TESTS_DIR = "tests" + "/" + "".join(sp.Popen([TOOLS_DIR + "/date/" + "get_date_footprint.sh"],stdout=sp.PIPE).communicate()[0].splitlines())
+TOOLS_DIR_NAME = "tools"
+DEF_TESTS_DIR_NAME = "tests" + "/" + "".join(sp.Popen([TOOLS_DIR_NAME + "/date/" + "get_date_footprint.sh"],stdout=sp.PIPE).communicate()[0].splitlines())
+BENCHMARK_APPS_DIR_NAME = "apps"
 
 def info(msg,quiet=False):
     if not quiet:
@@ -15,16 +16,22 @@ def error(msg,errn=1):
 
 #arguments
 apps            = oarg.Oarg(str,"-a --apps","","Apps directories list")
+benchmark       = oarg.Oarg(str,"-b --benchmark","","Benchmark directory")
 sliding         = oarg.Oarg(bool,"-s --sliding",False,"Sliding arguments mode")
 interleave      = oarg.Oarg(str,"-i --interleave",False,"Activates Interleaving policy")
-work_dir        = oarg.Oarg(str,"-w --work-dir",DEF_TESTS_DIR,"Directory to save results")
-numa_bal        = oarg.Oarg(bool,"-n --numa-balancing",False,"Activates automatic NUMA balancing")
+work_dir        = oarg.Oarg(str,"-w --work-dir",DEF_TESTS_DIR_NAME,"Directory to save results")
 quiet           = oarg.Oarg(bool,"-q --quiet",False,"Does not run so verbose")
-nb_scan_delay   = oarg.Oarg(int,"--sd --scan-delay",1000,"Automatic NUMA balancing scan delay")
+numa_bal        = oarg.Oarg(bool,"-n --numa-balancing",False,"Activates automatic NUMA balancing")
+nb_migrate_def	= oarg.Oarg(int,"--md --migrate-deferred",16,"Automatic NUMA balancing migrate deferred")
+nb_settle_count	= oarg.Oarg(int,"--sc --settle-count",4,"Automatic NUMA balancing settle count")
 nb_scan_size    = oarg.Oarg(int,"--ss --scan-size",256,"Automatic NUMA balancing scan size")
 nb_sp_min       = oarg.Oarg(int,"--spmin --scan-period-min",1000,"Automatic NUMA balancing scan period min")
+nb_scan_delay   = oarg.Oarg(int,"--sd --scan-delay",1000,"Automatic NUMA balancing scan delay")
 nb_sp_max       = oarg.Oarg(int,"--spmax --scan-period-max",60000,"Automatic NUMA balancing scan period max")
+nb_default		= oarg.Oarg(bool,"--def --default",False,"Automatic NUMA balancing default parameters") 
 hlp             = oarg.Oarg(bool,"-h --help",False,"This help message")
+
+numa_bal_options = dict([(key,val) for key,val in zip(["--md","--sc","--spmin","--sd","--spmax","--def"],
 
 #parsing and checking for wrong options
 if oarg.parse() != 0:
@@ -46,7 +53,14 @@ else:
     nb_params = [ (ss,spmin,sd,spmax) for sd in nb_scan_delay.vals for ss in nb_scan_size.vals for spmin in nb_sp_min.vals for spmax in nb_sp_max.vals if spmin <= sd <= spmax]
 
 #setting up apps
-targets = [ app.App(path) for path in apps.vals if path != ""]
+if apps.wasFound():
+    targets = [app.App(benchmark.getVal() + path) for path in apps.vals if path != ""]
+elif benchmark.wasFound():
+	targets = [d for d in os.listdir(benchmark + "/" + BENCHMARK_APPS_DIR_NAME) if d[0] != "."]
+else:
+	error("No applications specified")
+
+print "targets:",targets
 
 #setting up work dir
 info("creating results directory '" + work_dir.getVal() + "' ...")

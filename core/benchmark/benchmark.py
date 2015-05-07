@@ -1,5 +1,6 @@
-import subprocess
+import subprocess as sp
 
+"""
 class Benchmark:
     def __init__(self,apps,run_cmd,sys_cfg_script=None):
         if type(apps) == str: 
@@ -16,3 +17,4 @@ class Benchmark:
         cmd = self.run_cmd_prekey + app_key + self.run_cmd_poskey + opt_args 
         print "simulating system running command '" + cmd + "' ..." 
         #os.system(cmd)
+"""
