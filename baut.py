@@ -28,10 +28,7 @@ nb_scan_size    = oarg.Oarg(int,"--ss --scan-size",256,"Automatic NUMA balancing
 nb_sp_min       = oarg.Oarg(int,"--spmin --scan-period-min",1000,"Automatic NUMA balancing scan period min")
 nb_scan_delay   = oarg.Oarg(int,"--sd --scan-delay",1000,"Automatic NUMA balancing scan delay")
 nb_sp_max       = oarg.Oarg(int,"--spmax --scan-period-max",60000,"Automatic NUMA balancing scan period max")
-nb_default		= oarg.Oarg(bool,"--def --default",False,"Automatic NUMA balancing default parameters") 
 hlp             = oarg.Oarg(bool,"-h --help",False,"This help message")
-
-numa_bal_options = dict([(key,val) for key,val in zip(["--md","--sc","--spmin","--sd","--spmax","--def"],
 
 #parsing and checking for wrong options
 if oarg.parse() != 0:
@@ -43,14 +40,10 @@ if hlp.getVal():
     oarg.describeArgs()
     exit()
 
-#setting up numa balancing parameters list
-if sliding.getVal():
-    #checking if sliding args are correct
-    if len(set([len(arg.vals) for arg in nb_scan_delay,nb_scan_size,nb_sp_min,nb_sp_max])) != 1:
-        error("Invalid arguments passed")
-    nb_params = zip(nb_scan_size.vals,nb_sp_min.vals,nb_scan_delay.vals,nb_sp_max.vals)
-else:
-    nb_params = [ (ss,spmin,sd,spmax) for sd in nb_scan_delay.vals for ss in nb_scan_size.vals for spmin in nb_sp_min.vals for spmax in nb_sp_max.vals if spmin <= sd <= spmax]
+#setting up work dir
+info("creating results directory '" + work_dir.getVal() + "' ...")
+sp.Popen(["mkdir","-p",work_dir.getVal()]).wait()
+info("will start tests ...\n")
 
 #setting up apps
 if apps.wasFound():
@@ -60,20 +53,27 @@ elif benchmark.wasFound():
 else:
 	error("No applications specified")
 
-print "targets:",targets
+#dictionary for numa balancing parameters
+nb_options = dict([(key,val) for key,val in zip(["--md","--sc","--ss","--spmin","--sd","--spmax"],[nb_migrate_def,nb_settle_count,nb_scan_size,nb_sp_min,nb_scan_delay,nb_sp_max])])
+args = sum( [[key,val.getVal()] for key,val in nb_options.iteritems()], [] )
 
-#setting up work dir
-info("creating results directory '" + work_dir.getVal() + "' ...")
-sp.Popen(["mkdir","-p",work_dir.getVal()]).wait()
-info("will start tests ...\n")
+#setting up numa balancing parameters list
+if sliding.getVal():
+    #checking if sliding args are correct
+    if len(set([len(arg.vals) for _,arg in nb_options.iteritems()])) != 1:
+        error("Invalid arguments passed")
+    nb_params = zip(*[arg.vals for _,arg in nb_options.iteritems()])
+else:
+    nb_params = [ (md,sc,ss,spmin,sd,spmax) for md in nb_migrate_def.vals for sc in nb_settle_count.vals for sd in nb_scan_delay.vals for ss in nb_scan_size.vals for spmin in nb_sp_min.vals for spmax in nb_sp_max.vals if spmin <= sd <= spmax]
 
 #main loop
-for il,nb,ss,spmin,sd,spmax in [ (il,nb,ss,spmin,sd,spmax) for il in interleave.vals for nb in numa_bal.vals for ss,spmin,sd,spmax in nb_params ]:
-    info("setting autonuma params...",quiet.getVal())
+for il,nb,md,sc,ss,spmin,sd,spmax in [ (il,nb,md,sc,ss,spmin,sd,spmax) for il in interleave.vals for nb in numa_bal.vals for md,sc,ss,spmin,sd,spmax in nb_params ]:
+    info("setting autonuma params...",quiet=True)
     #sp.Popen(["sudo","setters/numa_balancing_config.py"] + sum([[i,str(j)] for i,j in zip(["-a","-s","-d","-m","-M"],[nb,ss,sd,spmin,spmax])],[])).wait()
-    info("running with il = " + str(il) + ", nb = " + str(nb) + ", (ss,spmin,sd,spmax) = " + str((ss,spmin,sd,spmax)) + " ...",quiet.getVal())
+    info("running with il = " + str(il) + ", nb = " + str(nb) + ", (md,sc,ss,spmin,sd,spmax) = " + str((md,sc,ss,spmin,sd,spmax)) + " ...",quiet.getVal())
     for target in targets:
         info("running application '" + target.name + "' ...")
         target.run()
         info("'" + target.key + "' output:")
+        target.dump()
     print ""
