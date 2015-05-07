@@ -16,21 +16,23 @@ def createStruct(path, files=[KEY_FILENAME,TIMES_FILENAME,LAST_LOG_FILENAME,HIST
 
 class App:
     """ abstraction of an application. use either struct_dir to specify the app's directory or key to specify a string that invokes the command"""
-    def __init__(self, struct_dir=None, key=""):
+    def __init__(self, struct_dir=None, key="", name=""):
         if struct_dir == None:
             self.key = key
+            self.name = name
         else:
-            proc = sp.Popen(["cat",struct_dir + "/" + KEY_FILENAME],stdout=sp.PIPE,stderr=sp.PIPE)
-            self.key = proc.communicate()[0]
+            self.key = "".join(open(struct_dir + "/" + KEY_FILENAME,"r").read().splitlines())
+            self.name = [i for i in struct_dir.split("/") if i != ""][-1]
+        self.struct_dir = struct_dir
         self.process = None
 
-    def run(self,args=[],stdout=sp.PIPE,stderr=sp.PIPE):
+    def run(self,args=[], out=sp.PIPE, err=sp.PIPE):
         """ runs command specified by key and stores outputs in pipes by default. args must be a list """
         cmd = [self.key] + args
-        self.process = sp.Popen(cmd,stdout=stdout,stderr=stderr)
+        self.process = sp.Popen(cmd,stdout=out,stderr=err)
         return self.process.wait()
 
-    def dump(self,stdout=sys.stdout,stderr=sys.stderr):
+    def dump(self, stdout=sys.stdout, stderr=sys.stderr):
         """ dumps output of command into specified file """
         out,err = self.process.communicate()
         if stdout != None:

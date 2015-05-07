@@ -1,0 +1,65 @@
+import oarg
+import core.app as app
+import subprocess as sp
+
+TOOLS_DIR = "tools"
+DEF_TESTS_DIR = "tests" + "/" + "".join(sp.Popen([TOOLS_DIR + "/date/" + "get_date_footprint.sh"],stdout=sp.PIPE).communicate()[0].splitlines())
+
+def info(msg,quiet=False):
+    if not quiet:
+        print "[baut] " + msg
+
+def error(msg,errn=1):
+    info("error: " + msg)
+    exit(errn)
+
+#arguments
+apps            = oarg.Oarg(str,"-a --apps","","Apps directories list")
+sliding         = oarg.Oarg(bool,"-s --sliding",False,"Sliding arguments mode")
+interleave      = oarg.Oarg(str,"-i --interleave",False,"Activates Interleaving policy")
+work_dir        = oarg.Oarg(str,"-w --work-dir",DEF_TESTS_DIR,"Directory to save results")
+numa_bal        = oarg.Oarg(bool,"-n --numa-balancing",False,"Activates automatic NUMA balancing")
+quiet           = oarg.Oarg(bool,"-q --quiet",False,"Does not run so verbose")
+nb_scan_delay   = oarg.Oarg(int,"--sd --scan-delay",1000,"Automatic NUMA balancing scan delay")
+nb_scan_size    = oarg.Oarg(int,"--ss --scan-size",256,"Automatic NUMA balancing scan size")
+nb_sp_min       = oarg.Oarg(int,"--spmin --scan-period-min",1000,"Automatic NUMA balancing scan period min")
+nb_sp_max       = oarg.Oarg(int,"--spmax --scan-period-max",60000,"Automatic NUMA balancing scan period max")
+hlp             = oarg.Oarg(bool,"-h --help",False,"This help message")
+
+#parsing and checking for wrong options
+if oarg.parse() != 0:
+     error("Invalid options passed: " + "".join(["'" + word + "'," for word in oarg.Oarg.invalid_options]))
+
+#help message
+if hlp.getVal():
+    info("Available options:")
+    oarg.describeArgs()
+    exit()
+
+#setting up numa balancing parameters list
+if sliding.getVal():
+    #checking if sliding args are correct
+    if len(set([len(arg.vals) for arg in nb_scan_delay,nb_scan_size,nb_sp_min,nb_sp_max])) != 1:
+        error("Invalid arguments passed")
+    nb_params = zip(nb_scan_size.vals,nb_sp_min.vals,nb_scan_delay.vals,nb_sp_max.vals)
+else:
+    nb_params = [ (ss,spmin,sd,spmax) for sd in nb_scan_delay.vals for ss in nb_scan_size.vals for spmin in nb_sp_min.vals for spmax in nb_sp_max.vals if spmin <= sd <= spmax]
+
+#setting up apps
+targets = [ app.App(path) for path in apps.vals if path != ""]
+
+#setting up work dir
+info("creating results directory '" + work_dir.getVal() + "' ...")
+sp.Popen(["mkdir","-p",work_dir.getVal()]).wait()
+info("will start tests ...\n")
+
+#main loop
+for il,nb,ss,spmin,sd,spmax in [ (il,nb,ss,spmin,sd,spmax) for il in interleave.vals for nb in numa_bal.vals for ss,spmin,sd,spmax in nb_params ]:
+    info("setting autonuma params...",quiet.getVal())
+    #sp.Popen(["sudo","setters/numa_balancing_config.py"] + sum([[i,str(j)] for i,j in zip(["-a","-s","-d","-m","-M"],[nb,ss,sd,spmin,spmax])],[])).wait()
+    info("running with il = " + str(il) + ", nb = " + str(nb) + ", (ss,spmin,sd,spmax) = " + str((ss,spmin,sd,spmax)) + " ...",quiet.getVal())
+    for target in targets:
+        info("running application '" + target.name + "' ...")
+        target.run()
+        info("'" + target.key + "' output:")
+    print ""

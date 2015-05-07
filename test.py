@@ -2,17 +2,11 @@ import core.app as app
 import tools.oarg as oarg
 import subprocess as sp
 
-appl = app.App(key="ls")
-print "ctor()"
-appl.run()
-print "run()"
-#appl.dump()
-#print "dump()"
-ext = app.Extractor("exts/timer/time_filter.sh",key="exts/timer/time_runner.sh")
-print "ext.ctor()"
-ext.run([appl.key,"-l"])
-print "ext.run()"
-ext.filter()
-print "ext.filter()"
-ext.dump()
-print "ext.dump()"
+perf = app.App(key="perf")
+
+apps = [ app.App(key=k) for k in ["ls","sleep 1","dmesg"] ]
+
+for appl in apps:
+    perf.run(["stat",appl.key])
+    print "dumping..."
+    perf.dump()
