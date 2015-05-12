@@ -27,7 +27,9 @@ class App:
             self.name = [i for i in struct_dir.split("/") if i != ""][-1]
         self.struct_dir = struct_dir
         self.process = None
-        self.run_dir = None
+        self.run_dir = ""
+        self.out = ""
+        self.err = ""
         
     def createRunDir(self, base_dir="."):
         self.run_dir = base_dir + "/" + self.name
@@ -39,15 +41,15 @@ class App:
         """ runs command specified by key and stores outputs in pipes by default. args must be a list """
         cmd = [self.key] + args
         self.process = sp.Popen(cmd,stdout=out,stderr=err)
-        return self.process.wait()
+        self.out,self.err = self.process.communicate()
+        return self.process.returncode
 
-    def dump(self, stdout=sys.stdout, stderr=sys.stderr):
+    def dump(self, out=sys.stdout, err=sys.stderr):
         """ dumps output of command into specified file """
-        out,err = self.process.communicate()
-        if stdout != None:
-            stdout.write(out)
-        if stderr != None:
-            stderr.write(err) 
+        if out != None:
+            out.write(self.out)
+        if err != None:
+            err.write(self.err) 
 
 class Extractor(App):
     """ extracts some information from some application. to accomplish this, a filter script and an optional runner script are specifieds.

@@ -10,4 +10,7 @@ spmax=$numa_bal_ground"_scan_period_max_ms"
 md=$numa_bal_ground"_migrate_deferred"
 sc=$numa_bal_ground"_settle_count"
 
-echo "nb"$(cat $nb)"_md"$(cat $md)"_sc"$(cat $sc)"_ss"$(cat $ss)"_sd"$(cat $sd)"_spmin"$(cat $spmin)"_spmax"$(cat $spmax)
+#gatzalt
+#printf "nb"$(cat $nb)"_md"$(cat $md)"_sc"$(cat $sc)"_ss"$(cat $ss)"_sd"$(cat $sd)"_spmin"$(cat $spmin)"_spmax"$(cat $spmax)
+#pc
+printf "nb"$(cat $nb)"_ss"$(cat $ss)"_sd"$(cat $sd)"_spmin"$(cat $spmin)"_spmax"$(cat $spmax)

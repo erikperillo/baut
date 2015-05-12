@@ -14,6 +14,9 @@ def error(msg,errn=1):
     info("error: " + msg)
     exit(errn)
 
+def numaBalStateString(script="tools/numa/numa_bal_state_string.sh"):
+    return sp.Popen([script],stdout=sp.PIPE).communicate()[0]
+
 #arguments
 apps            = oarg.Oarg(str,"-a --apps","","Apps directories list")
 benchmark       = oarg.Oarg(str,"-b --benchmark","","Benchmark directory")
@@ -40,18 +43,18 @@ if hlp.getVal():
     oarg.describeArgs()
     exit()
 
-#setting up work dir
-info("creating results directory '" + work_dir.getVal() + "' ...")
-sp.Popen(["mkdir","-p",work_dir.getVal()]).wait()
-info("will start tests ...\n")
-
 #setting up apps
 if apps.wasFound():
     targets = [app.App(benchmark.getVal() + path) for path in apps.vals if path != ""]
 elif benchmark.wasFound():
 	targets = [d for d in os.listdir(benchmark + "/" + BENCHMARK_APPS_DIR_NAME) if d[0] != "."]
 else:
-	error("No applications specified")
+    error("No applications specified\nUse '--help' for more information")
+
+#setting up work dir
+info("creating results directory '" + work_dir.getVal() + "' ...")
+sp.Popen(["mkdir","-p",work_dir.getVal()]).wait()
+info("will start tests ...\n")
 
 #dictionary for numa balancing parameters
 nb_options = dict([(key,val) for key,val in zip(["--md","--sc","--ss","--spmin","--sd","--spmax"],[nb_migrate_def,nb_settle_count,nb_scan_size,nb_sp_min,nb_scan_delay,nb_sp_max])])
@@ -71,13 +74,27 @@ for il,nb,md,sc,ss,spmin,sd,spmax in [ (il,nb,md,sc,ss,spmin,sd,spmax) for il in
     info("setting autonuma params...",quiet=True)
     #sp.Popen(["sudo","setters/numa_balancing_config.py"] + sum([[i,str(j)] for i,j in zip(["-a","-s","-d","-m","-M"],[nb,ss,sd,spmin,spmax])],[])).wait()
     info("running with il = " + str(il) + ", nb = " + str(nb) + ", (md,sc,ss,spmin,sd,spmax) = " + str((md,sc,ss,spmin,sd,spmax)) + " ...",quiet.getVal())
+
     for target in targets:
-        info("creating application test structure '" + target.run_dir + "' ...")
-        info.target.createRunDir(base_dir=work_dir.getVal())
+        if target.run_dir == "":
+            info("creating application test structure ...")
+            target.createRunDir(base_dir=work_dir.getVal())
+            info("created '" + target.run_dir + "'")
+        #creating dir
+        tgt_curr_dir = target.run_dir + "/" + app.APP_CONFIGS_DIRNAME + "/" + "il" + str(il) + "_" + numaBalStateString()
+        sp.Popen(["mkdir","-p",tgt_curr_dir])
 
         info("running application '" + target.name + "' ...")
         target.run()
 
         info("'" + target.key + "' output:")
         target.dump()
+ 
+        #creating files
+        last_run_file = open(tgt_curr_dir + "/last_run.txt","w")
+        hist_run_file = open(tgt_curr_dir + "/hist_run.txt","a")
+
+        for fl in last_run_file,hist_run_file:
+            target.dump(out=fl,err=None)
+            fl.close()
     print ""
