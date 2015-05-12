@@ -1,0 +1,16 @@
+set title "TITLE"
+set ylabel "Average time (seconds)"
+set xtics rotate by -45
+set offset 0.2,0.2,0.1
+set key off
+set datafile separator ","
+set bmargin 16
+set tmargin 2
+set rmargin 27
+set grid 
+set style line 1 lt 5 lc rgb "orange"
+set terminal png size SIZE enhanced font "Verdana, 13"
+set output "OUT_IMG"
+set xtics font "Verdana, 8"
+
+plot "IN_FILE" using :2:3:xtic(1) with yerrorbars, "" using :2:xtic(1) with lines ls 1

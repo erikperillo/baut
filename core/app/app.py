@@ -6,6 +6,8 @@ KEY_FILENAME        = "key"
 TIMES_FILENAME      = "times.rdt"
 LAST_LOG_FILENAME   = "last.log"
 HIST_LOG_FILENAME   = "hist.log"
+APP_CONFIGS_DIRNAME = "confs"
+APP_RESUME_DIRNAME  = "resume"
 
 def createStruct(path, files=[KEY_FILENAME,TIMES_FILENAME,LAST_LOG_FILENAME,HIST_LOG_FILENAME]):
     """ creates a struct for an app with necessary information for it to be run.
@@ -25,6 +27,13 @@ class App:
             self.name = [i for i in struct_dir.split("/") if i != ""][-1]
         self.struct_dir = struct_dir
         self.process = None
+        self.run_dir = None
+        
+    def createRunDir(self, base_dir="."):
+        self.run_dir = base_dir + "/" + self.name
+        for d in [APP_RESUME_DIRNAME,APP_CONFIGS_DIRNAME]:
+            proc = sp.Popen(["mkdir","-p",self.run_dir + "/" + d])
+            proc.wait()
 
     def run(self,args=[], out=sp.PIPE, err=sp.PIPE):
         """ runs command specified by key and stores outputs in pipes by default. args must be a list """

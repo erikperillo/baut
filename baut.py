@@ -72,8 +72,12 @@ for il,nb,md,sc,ss,spmin,sd,spmax in [ (il,nb,md,sc,ss,spmin,sd,spmax) for il in
     #sp.Popen(["sudo","setters/numa_balancing_config.py"] + sum([[i,str(j)] for i,j in zip(["-a","-s","-d","-m","-M"],[nb,ss,sd,spmin,spmax])],[])).wait()
     info("running with il = " + str(il) + ", nb = " + str(nb) + ", (md,sc,ss,spmin,sd,spmax) = " + str((md,sc,ss,spmin,sd,spmax)) + " ...",quiet.getVal())
     for target in targets:
+        info("creating application test structure '" + target.run_dir + "' ...")
+        info.target.createRunDir(base_dir=work_dir.getVal())
+
         info("running application '" + target.name + "' ...")
         target.run()
+
         info("'" + target.key + "' output:")
         target.dump()
     print ""
