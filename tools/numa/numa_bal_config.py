@@ -15,7 +15,7 @@ scan_period_min = oarg.Oarg(int,"--spmin --scan-period-min",1000,"Minimum scan p
 scan_period_max = oarg.Oarg(int,"--spmax --scan-period-max",6000,"Maximum scan period in millisseconds")
 migrate_def 	= oarg.Oarg(int,"--md --migrate-deferred",16,"Migrate deferred parameter")
 settle_count 	= oarg.Oarg(int,"--sc --settle-count",4,"Settle count parameter")
-default		= oarg.Oarg(bool,"-d --default",False,"Set all parameters to default")
+default		    = oarg.Oarg(bool,"-d --default",False,"Set all parameters to default")
 hlp             = oarg.Oarg(bool,"-h --help",False,"This help message")
 
 #checking args validity

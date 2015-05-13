@@ -36,7 +36,6 @@ class App:
         for d in [APP_RESUME_DIRNAME,APP_CONFIGS_DIRNAME]:
             proc = sp.Popen(["mkdir","-p",self.run_dir + "/" + d])
             proc.wait()
-
     def run(self,args=[], out=sp.PIPE, err=sp.PIPE):
         """ runs command specified by key and stores outputs in pipes by default. args must be a list """
         cmd = [self.key] + args
