@@ -28,8 +28,7 @@ class SysState(object):
             self._val = value 
 
 class RuntimeState(object):
-    def __init__(self,name,key,activated=False,priority=-1):
-        self.name = name
+    def __init__(self,key,activated=False,priority=-1):
         self.key = key
         self.activated = activated
         self.priority = priority
