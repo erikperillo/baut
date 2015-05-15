@@ -1,7 +1,14 @@
 import state
 
-numa_balancing = state.SysState("numa balancing",getter=["head","-c","1","/proc/sys/kernel/numa_balancing"],setter=["python","../../tools/numa/numa_bal_config.py","-a"])
+a = state.CmdState("lel",True,3)
+b = state.CmdState("l0l",False)
+c = state.CmdState("hehe")
+d = state.CmdState("HUE",False,2)
+e = state.CmdState("rs",False,2)
 
-print "numa balancing is",numa_balancing.val
-numa_balancing.val = not numa_balancing.val[0] in ["1","True","true"]
-print "numa balancing is",numa_balancing.val
+d.val,e.val = True,False
+
+print state.CmdState.get()
+
+state.CmdState.clear()
+f = state.CmdState("rs",True,3)
