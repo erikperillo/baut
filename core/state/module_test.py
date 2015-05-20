@@ -3,8 +3,8 @@ import state
 a = state.CmdState("lel",True,3)
 b = state.CmdState("l0l",False)
 c = state.CmdState("hehe")
-d = state.CmdState("HUE",False,2)
-e = state.CmdState("rs",False,2)
+d = state.CmdState("HUE",False,-1)
+e = state.CmdState("rs",False,1)
 
 d.val,e.val = True,False
 
