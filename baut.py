@@ -6,7 +6,7 @@ import subprocess as sp
 TOOLS_DIR_NAME = "tools"
 DEF_TESTS_DIR_NAME = "tests" + "/" + "".join(sp.Popen([TOOLS_DIR_NAME + "/date/" + "get_date_footprint.sh"],stdout=sp.PIPE).communicate()[0].splitlines())
 STATES_DIR_NAME = "states"
-APPS_DIR_NAME = STATES_DIR_NAME + "/" + "apps"
+    APPS_DIR_NAME = STATES_DIR_NAME + "/" + "apps"
 BENCHMARK_APPS_DIR_NAME = "apps"
 NUMABAL_COMMOM_PATH = "/proc/sys/kernel/numa_balancing"
 NUMABAL_CONFIG_FILE = "tools/numa/numa_bal_config.py"
@@ -19,8 +19,15 @@ def error(msg,errn=1):
     info("error: " + msg)
     exit(errn)
 
-#extractors
-timer = app.Extractor(
+#command line states
+timer_cmd = st.CmdState(["/usr/bin/time","-f","timer_real: %e"],active=True)
+testapp = app.App("bms/ex/dur")
+info("running ...")
+testapp.run(cmdstate=True)
+info("dumping ...")
+testapp.dump()
+info("done")
+exit()
 
 #application specific
 numabal_keys = ("","migrate_deferred","settle_count","scan_size_mb","scan_period_min_ms","scan_delay_ms","scan_period_max_ms")
@@ -29,7 +36,7 @@ numabal_config_flags = ("-a","--md","--sc","--ss","--spmin","--sd","--spmax")
 #states
 sys_states_descr = dict([ ("numa_balancing" + ("_" if key != "" else "") + key,st.SysState(getter=["head","-c","1",NUMABAL_COMMOM_PATH + ("_" + key) if key != "" else ""],\
                           setter=[NUMABAL_CONFIG_FILE,flag])) for key,flag in zip(numabal_keys,numabal_config_flags) ])
-runtime_states_descr = {"interleave": st.RuntimeState("--interleave=all")}
+cmdline_states_descr = {"interleave": st.CmdState("--interleave=all")}
 
 #arguments
 apps            = oarg.Oarg(str,"-a --apps","","Apps directories list")
@@ -69,6 +76,10 @@ elif benchmark.wasFound():
 else:
     error("No applications specified\nUse '--help' for more information")
 
+for tgt in targets:
+    print "app name '" + tgt.name + "', key =" + tgt.key
+exit()
+
 #setting up numa balancing parameters list
 if sliding.getVal():
     if len(set([len(arg.vals) for arg in nb_options])) != 1:
@@ -87,18 +98,23 @@ info("will start tests ...\n")
 
 #setting sys keys
 sys_states_keys = tuple("numb_balancing_" + i for i in numabal_keys)
-runtime_states_keys = ("interleave",)
+cmdline_states_keys = ("interleave",)
 #setting sys values
 sys_states_vals = nb_params
-runtime_states_vals = interleave_params
+cmdline_states_vals = interleave_params
 
 counter = 0
 for ssv in sys_states_vals:
-    for rsv in runtime_states_vals:
+    for rsv in cmdline_states_vals:
         #creating dictionaries
         #ss_dict = dict( (k,v) for k,v in zip(sys_states_keys,ss) )
-        #rs_dict = dict( (k,v) for k,v in zip(runtime_states_keys,rs) )
+        #rs_dict = dict( (k,v) for k,v in zip(cmdline_states_keys,rs) )
         #setting
+        info("iteration " + str(counter) + ": ")
+        print "\tssv:",ssv
+        print "\trsv:",rsv
+        
+        """
         for (_,state),value in zip(sys_states_descr.iteritems(),ssv):
             state.val = value
 
@@ -113,11 +129,11 @@ for ssv in sys_states_vals:
         sf.write("state_name,state_value\n")
         for key,val in zip(sys_states_descr,ssv):
             sf.write(key + "," + str(val) + "\n")
-        for key,val in zip(runtime_states_descr,rsv):
+        for key,val in zip(cmdline_states_descr,rsv):
             sf.write(key + "," + str(val) + "\n")
         sf.close()
 
-        #creating key for process
+        #creating key for process"""
 
         counter += 1
 

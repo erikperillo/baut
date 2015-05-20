@@ -44,13 +44,14 @@ class CmdState(State):
     """This class represents the command line that will be used to run a program. Some stuff change programs' performance and are determined in the command line, so this is reasonable."""
     DESCRS = {}
 
-    def __init__(self, key, active=False, priority=1):
-        """key is the string that'll go to the command, priotiry is the position os the command. The lower the number, the more it will be in the front (from left to right). Activate/deactivate it with 'val' setter."""
+    def __init__(self, cmd, priority=1, active=False):
+        """cmd is the list of strings that'll go to the command, priotiry is the position os the command. The lower the number, the more it will be in the front (from left to right). Activate/deactivate it with 'val' setter."""
+        key = " ".join(cmd)
         if key in CmdState.DESCRS:
             raise ValueError("duplicate key '" + key + "'")
 
-        CmdState.DESCRS.update({key: [active,priority]})
-        self.key = key
+        CmdState.DESCRS.update({key: [cmd,active,priority]})
+        self.key = key 
         self.active = active
 
     @property
@@ -68,8 +69,8 @@ class CmdState(State):
     @staticmethod
     def get():
         """returns the whole command line as a list of strings."""
-        ret = [(key,p) for key,(active,p) in CmdState.DESCRS.iteritems() if active]
-        ret.sort(key=lambda x: x[1])
+        ret = [(cmd,p) for _,(cmd,active,p) in CmdState.DESCRS.iteritems() if active]
+        ret.sort(key=lambda x: x[-1])
         return [i for i,_ in ret]
         
     @staticmethod
