@@ -1,8 +1,7 @@
 import app
 
-e = app.Extractor("filter.sh",key="perf")
-
-e.run(["stat","echo","hue"])
-
-e.filter()
-
+a = app.App(key="ls",name="list_dir")
+print "running..."
+a.run()
+print "dumping..."
+a.dump()

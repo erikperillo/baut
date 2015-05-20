@@ -19,6 +19,9 @@ def error(msg,errn=1):
     info("error: " + msg)
     exit(errn)
 
+#extractors
+timer = app.Extractor(
+
 #application specific
 numabal_keys = ("","migrate_deferred","settle_count","scan_size_mb","scan_period_min_ms","scan_delay_ms","scan_period_max_ms")
 numabal_config_flags = ("-a","--md","--sc","--ss","--spmin","--sd","--spmax")
