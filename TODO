@@ -1,5 +1,7 @@
-	-arrumar os arquivos dos apps para retirar newlines
-	-criar pastas de extractors de brinquedo
-	-rodar um app com cmdstate modificado para tirar timing e extrair tempo
-	-rodar, estruturar onde será tudo salvo
+	-arrumar os arquivos dos apps para retirar newlines [x]
+	-criar pastas de extractors de brinquedo [x]
+	-rodar um app com cmdstate modificado para tirar timing e extrair tempo [x]
+	-rodar, estruturar onde será tudo salvo [x]
 	-tratar exceções
+	-baut2:
+	-não extrair nada na parte de rodar, só depois

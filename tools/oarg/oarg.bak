@@ -32,10 +32,7 @@ class Oarg:
           if len(self.str_vals) == 0:
                self.vals = (self.def_val,)
                return
-          if self.tp == bool:
-               self.vals = tuple( i in ["True","true","TRUE","y","yes","Y","Yes","YES","1"] for i in self.str_vals )
-          else:
-               self.vals = tuple(self.tp(i) for i in self.str_vals)
+          self.vals = tuple(self.tp(i) for i in self.str_vals)
           
      @staticmethod
      def pureName(name):
@@ -98,10 +95,9 @@ def parse(argv=sys.argv):
                               break
                else:
                     if not deleted:
-                         if not (oarg.tp == bool and Oarg.isClName(arg)):
-                             oarg.str_vals = osplit(arg)
-                             argv.remove(arg)
+                         oarg.str_vals = osplit(arg)
                          argv.remove(argv[i-1])
+                         argv.remove(arg)
                          deleted = True
                          break
                     else:

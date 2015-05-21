@@ -8,12 +8,14 @@ CMD_FILENAME        = "cmd"
 NAME_FILENAME       = "name"
 TIMES_FILENAME      = "times.rdt"
 OPT_CONFIG_FILENAME = "pre_conf.sh"
-LAST_LOG_FILENAME   = "last.log"
-HIST_LOG_FILENAME   = "hist.log"
+LAST_STDOUT_LOG     = "stdout_last.log"
+LAST_STDERR_LOG     = "stderr_last.log"
+HIST_STDOUT_LOG     = "stdout_hist.log"
+HIST_STDERR_LOG     = "stderr_hist.log"
 APP_CONFIGS_DIRNAME = "confs"
 APP_RESUME_DIRNAME  = "resume"
 
-def createStruct(path, files=[CMD_FILENAME,TIMES_FILENAME,LAST_LOG_FILENAME,HIST_LOG_FILENAME]):
+def createStruct(path, files=[CMD_FILENAME,TIMES_FILENAME]):
     """ creates a struct for an app with necessary information for it to be run.
         path: a string designing the path of a dir where it will be saved"""
     commands = [ ["mkdir","-p",path] ] + [ ["touch",path + "/" + fl] for fl in files ]
@@ -47,12 +49,6 @@ class App:
         self.run_dir    = ""
         self.out        = ""
         self.err        = ""
-        
-    def createRunDir(self, base_dir="."):
-        self.run_dir = base_dir + "/" + self.name
-        for d in [APP_RESUME_DIRNAME,APP_CONFIGS_DIRNAME]:
-            proc = sp.Popen(["mkdir","-p",self.run_dir + "/" + d])
-            proc.wait()
 
     def run(self, args=[], out=sp.PIPE, err=sp.PIPE, source=None, cmdstate=False):
         """ runs command specified by cmd and stores outputs in pipes by default. args must be a list """
@@ -69,8 +65,6 @@ class App:
             out.write(self.out)
         if err != None:
             err.write(self.err) 
-        out.close()
-        err.close()
 
     def clear(self):
         self.out,self.err = "",""
