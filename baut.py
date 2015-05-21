@@ -4,6 +4,7 @@ import core.state as st
 import subprocess as sp
 import os
 
+#definitions
 TOOLS_DIR_NAME = "tools"
 DEF_TESTS_DIR_NAME = "tests" + "/" + "".join(sp.Popen([TOOLS_DIR_NAME + "/date/" + "get_date_footprint.sh"],stdout=sp.PIPE).communicate()[0].splitlines())
 STATES_DIR_NAME = "states"
@@ -13,6 +14,8 @@ BENCHMARK_APPS_DIR_NAME = "apps"
 NUMABAL_COMMOM_PATH = "/proc/sys/kernel"
 NUMABAL_CONFIG_FILE = "tools/numa/numa_bal_config.py"
 TIMES_FILE = "times"
+VALS_FILE = "vals.csv"
+VALS_FILE_TRANSPOSED = "vals_transposed.csv"
 
 def info(msg,quiet=False):
     if not quiet:
@@ -23,9 +26,12 @@ def error(msg,errn=1):
     exit(errn)
 
 #command line states
-timer_cmd = st.CmdState(["/usr/bin/time","-f","timer_real: %e"],active=True)
-#time extractor
+timer_cmd = st.CmdState(["/usr/bin/time","-p"],active=True)
+
+#extractors
 timer = app.Extractor("testext")
+timer_sys = app.Extractor("testext2")
+extractors = [timer,timer_sys]
 
 #application specific
 #numabal_keys = ("numa_balancing","numa_balancing_migrate_deferred","numa_balancing_settle_count","numa_balancing_scan_size_mb","numa_balancing_scan_period_min_ms","numa_balancing_scan_delay_ms","numa_balancing_scan_period_max_ms")
@@ -53,6 +59,7 @@ nb_sp_min       = oarg.Oarg(int,"--spmin --scan-period-min",1000,"Automatic NUMA
 nb_scan_delay   = oarg.Oarg(int,"--sd --scan-delay",1000,"Automatic NUMA balancing scan delay")
 nb_sp_max       = oarg.Oarg(int,"--spmax --scan-period-max",60000,"Automatic NUMA balancing scan period max")
 n_reps          = oarg.Oarg(int,"--reps --repetitions",1,"Number of repetitions for each iteration")
+extract         = oarg.Oarg(str,"--ext --extract","","Features to extract")
 hlp             = oarg.Oarg(bool,"-h --help",False,"This help message")
 
 #dictionary for numa balancing parameters
@@ -68,6 +75,49 @@ if oarg.parse() != 0:
 if hlp.getVal():
     info("Available options:")
     oarg.describeArgs()
+    exit()
+
+if extract.wasFound():
+    import csv
+
+    if not work_dir.wasFound():
+        error("you must specify a directory to extract from")
+
+    states_dirs = [work_dir.getVal() + "/" + STATES_DIR_NAME + "/" + d for d in os.listdir(work_dir.getVal() + "/" + STATES_DIR_NAME)]
+    apps_dirs = [sd + "/" + APPS_DIR_NAME + "/" + d for sd in states_dirs for d in os.listdir(sd + "/" + APPS_DIR_NAME)]
+
+    #dirs = ["/".join([states_dir,sd,APPS_DIR_NAME,ad,app.LOGS_DIR]) for sd in os.listdir(states_dir)\
+    #        for ad in os.listdir("/".join([states_dir,sd,APPS_DIR_NAME]))]
+
+    for d in apps_dirs:
+        for ext in extractors:
+            line = []
+            line.append(ext.name)
+
+            info("filtering files to use ...")
+            filenames = [d + "/" + app.LOGS_DIR + "/" + f for f in os.listdir(d + "/" + app.LOGS_DIR) if f.find(ext.filter_key) >= 0]
+            for fn in filenames:
+                info("extracting information from '" + fn + "' ...")
+                src = open(fn,"r")
+                ext.extract(source=src)
+                src.close()
+                line.append(ext.out.replace("\n",""))
+
+            info("writing in file '" + d + "/" + VALS_FILE_TRANSPOSED + "' ...")
+            f = open(d + "/" + VALS_FILE_TRANSPOSED,"a" if extractors.index(ext) > 0 else "w")
+            f.write(",".join(line) + "\n")
+            f.close()
+
+        info("transposing '" + d + "/" + VALS_FILE_TRANSPOSED + "' ...")
+        f = open(d + "/" + VALS_FILE_TRANSPOSED,"r")
+        ft = open(d + "/" + VALS_FILE,"w")
+        rows = list(csv.reader(f))
+        writer = csv.writer(ft)
+        for col in xrange(0, len(rows[0])):
+            writer.writerow([row[col] for row in rows]) 
+        f.close()
+        ft.close()
+
     exit()
 
 #setting up apps
@@ -146,34 +196,34 @@ for ssv in sys_states_vals:
             if not os.path.isdir(tgt_dir):
                 os.makedirs(tgt_dir) 
 
+            info("creating logs dir '" + tgt_dir + "/" + app.LOGS_DIR + "' ...")
+            if not os.path.isdir(tgt_dir + "/" + app.LOGS_DIR):
+                os.makedirs(tgt_dir + "/" + app.LOGS_DIR)
+
             info("creating times file '" + tgt_dir + "/" + TIMES_FILE + "'...")
             f = open(tgt_dir + "/" + TIMES_FILE, "w")
             f.write("real_s" + "\n")
             f.close()
 
-            for i in range(n_reps.getVal()):
-                info("running app '" + tgt.name + "' (" + str(i+1) + " of " + str(n_reps.getVal()) + ") ...")
+            for i in range(1,n_reps.getVal()+1):
+                info("running app '" + tgt.name + "' (" + str(i) + " of " + str(n_reps.getVal()) + ") ...")
                 tgt.run(cmdstate=True)
 
                 #info("result of command '" + " ".join(tgt.cmd) + "':") 
                 #tgt.dump()
+                
+                tgt_out_log = "/".join([tgt_dir,app.LOGS_DIR,str(i) + "_" + app.STDOUT_LOG])
+                tgt_err_log = "/".join([tgt_dir,app.LOGS_DIR,str(i) + "_" + app.STDERR_LOG])
 
-                info("dumping result stdout to '" + tgt_dir + "/" + app.LAST_STDOUT_LOG + "' ...")
-                info("dumping result stderr to '" + tgt_dir + "/" + app.LAST_STDERR_LOG + "' ...")
-                of,ef = open(tgt_dir + "/" + app.LAST_STDOUT_LOG,"w"),open(tgt_dir + "/" + app.LAST_STDERR_LOG,"w")
+                info("dumping result stdout to '" + tgt_out_log + "' ...")
+                info("dumping result stderr to '" + tgt_err_log + "' ...")
+                of,ef = open(tgt_out_log,"w"),open(tgt_err_log,"w")
                 tgt.dump(out=of,err=ef)
                 of.close()
                 ef.close() 
 
-                info("dumping result stdout to '" + tgt_dir + "/" + app.HIST_STDOUT_LOG + "' ...")
-                info("dumping result stderr to '" + tgt_dir + "/" + app.HIST_STDERR_LOG + "' ...")
-                of,ef = open(tgt_dir + "/" + app.HIST_STDOUT_LOG,"a"),open(tgt_dir + "/" + app.HIST_STDERR_LOG,"a")
-                tgt.dump(out=of,err=ef)
-                of.close()
-                ef.close()
-
                 info("extracting time information from stderr ...")
-                ef = open(tgt_dir + "/" + app.LAST_STDERR_LOG, "r")
+                ef = open(tgt_err_log,"r")
                 timer.extract(source=ef)
                 ef.close()
 

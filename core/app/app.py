@@ -1,6 +1,6 @@
 import subprocess as sp
 import sys
-import os.path as osp
+import os
 from ..state import state
 
 #filenames definitions
@@ -8,11 +8,11 @@ CMD_FILENAME        = "cmd"
 NAME_FILENAME       = "name"
 TIMES_FILENAME      = "times.rdt"
 OPT_CONFIG_FILENAME = "pre_conf.sh"
-LAST_STDOUT_LOG     = "stdout_last.log"
-LAST_STDERR_LOG     = "stderr_last.log"
-HIST_STDOUT_LOG     = "stdout_hist.log"
-HIST_STDERR_LOG     = "stderr_hist.log"
+STDOUT_LOG          = "stdout.log"
+STDERR_LOG          = "stderr.log"
+LOGS_DIR            = "logs"
 APP_CONFIGS_DIRNAME = "confs"
+EXT_FILTER_FILE     = "filter_stdout"
 APP_RESUME_DIRNAME  = "resume"
 
 def createStruct(path, files=[CMD_FILENAME,TIMES_FILENAME]):
@@ -35,13 +35,13 @@ class App:
             f = open(struct_dir + "/" + CMD_FILENAME,"r")
             self.cmd = [ line.replace("\n","") for line in f ]
             f.close()
-            if name == "" and osp.isfile(struct_dir + "/" + NAME_FILENAME):
+            if name == "" and os.path.isfile(struct_dir + "/" + NAME_FILENAME):
                 f = open(struct_dir + "/" + NAME_FILENAME,"r")
-                self.name = f.read()
+                self.name = f.read().replace("\n","")
                 f.close()
 
         #checking if there is an optional script to run
-        if osp.isfile(struct_dir + "/" + OPT_CONFIG_FILENAME):
+        if os.path.isfile(struct_dir + "/" + OPT_CONFIG_FILENAME):
             sp.Popen([struct_dir + "/" + OPT_CONFIG_FILENAME]).wait() 
              
         self.struct_dir = struct_dir
@@ -73,6 +73,13 @@ class Extractor(App):
     """ Extracts some information from some application. To accomplish this, a filter script and an optional runner script are specifieds. It must comply with the following protocol: runner scripts may use the cmd of the app to be measured as argument and it's relevant output must be in stdout. filter script takes something from some file and must store relevant output in stdout."""
     def __init__(self, struct_dir="", filter_script="", name=""):
         App.__init__(self,struct_dir,filter_script,name)
+        if struct_dir != "":
+            f = open(struct_dir + "/" + EXT_FILTER_FILE,"r")
+            ext_ff_out = f.read().replace("\n","")
+            f.close()
+            self.filter_key = STDOUT_LOG if ext_ff_out in ["1","true","TRUE","True"] else STDERR_LOG
+        else:
+            self.filter_key = STDOUT_LOG
 
     def createRunDir(self):
         pass

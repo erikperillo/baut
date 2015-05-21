@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cat | grep "timer_real:" | cut -f2 -d" "
+cat | grep "real" | cut -f2 -d" "
