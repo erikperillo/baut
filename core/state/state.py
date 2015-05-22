@@ -64,7 +64,7 @@ class CmdState(State):
             raise ValueError("rvalue must be of type bool")
 
         self._active = value
-        CmdState.DESCRS[self.key][0] = value 
+        CmdState.DESCRS[self.key][1] = value 
 
     @staticmethod
     def get():
