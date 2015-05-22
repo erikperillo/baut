@@ -160,9 +160,9 @@ def runRoutine():
 
             info("state values:")
             for k,s in sys_states_descr.iteritems():
-                print "\t" + k,":",s.val
+                print "\t\t" + k,":",s.val
             for k,s in cmdline_states_descr.iteritems():
-                print "\t" + k,":",s.val
+                print "\t\t" + k,":",s.val
 
             curr_state_dir = work_dir.getVal() + "/" + STATES_DIR_NAME + "/" + str(counter)
             info("creating directory '" + curr_state_dir + "' ...")
@@ -279,8 +279,8 @@ if __name__ == "__main__":
         baut_key = "[baut::extract]"
 
         #args
-        work_dir = oarg.Oarg(str,"-w --work-dir",DEF_TESTS_DIR_NAME,"Directory to extract results")
         hlp      = oarg.Oarg(bool,"-h --help",False,"This help message")
+        work_dir = oarg.Oarg(str,"-w --work-dir",DEF_TESTS_DIR_NAME,"Directory to extract results")
         exts     = oarg.Oarg(str,"--exts","","Extractors paths")
 
         if oarg.parse() != 0 and not all( i in opts for i in oarg.Oarg.invalid_options ):
@@ -293,6 +293,8 @@ if __name__ == "__main__":
 
         if not exts.wasFound():
             error("no extractors specified")
+        if not work_dir.wasFound():
+            error("no target directory specified")
 
         extractors = [app.Extractor(path) for path in exts.vals if path != ""]
 
