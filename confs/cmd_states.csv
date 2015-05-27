@@ -1,2 +1,3 @@
 #name,cmd,priority,oarg_keys,oarg_description
-timer,/usr/bin/time -p,0,--timer,Prints times of execution
+timer,/usr/bin/time -p,0,-timer,Prints times of execution
+interleave,numactl -interleave=all,1,-interleave,activates interleaving memory policy

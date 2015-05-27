@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 
-import oarg
+import oarg2 as oarg
 import core.app as app
 import core.state as st
 import subprocess as sp
@@ -28,14 +28,14 @@ actions = ["run","extract"]
 baut_key = "[baut]"
 
 #command line arguments
-action          = oarg.Oarg(str,"-a --action","","Action to execute",1)
-quiet           = oarg.Oarg(bool,"-q --quiet",False,"Does not run so verbose")
-sys_states_file = oarg.Oarg(str,"--sf --sys-states-file",DEF_SYSSTATES_FILE,"System states file (run mode)")
-cmd_states_file = oarg.Oarg(str,"--cf --cmd-states-file",DEF_CMDSTATES_FILE,"Command line states file (run mode)")
-hlp             = oarg.Oarg(bool,"-h --help",False,"This help message")
+action          = oarg.Oarg(str,"-a -action","","Action to execute",0)
+quiet           = oarg.Oarg(bool,"-q -quiet",False,"Does not run so verbose")
+sys_states_file = oarg.Oarg(str,"-sf -sys-states-file",DEF_SYSSTATES_FILE,"System states file (run mode)")
+cmd_states_file = oarg.Oarg(str,"-cf -cmd-states-file",DEF_CMDSTATES_FILE,"Command line states file (run mode)")
+hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
 
 #options
-opts            = ["--cf","--cmd-states-file","--sf","--sys-states-file","-q","--quiet","-a","--action"]
+opts            = ["-cf","-cmd-states-file","-sf","-sys-states-file","-q","-quiet","-a","-action"]
 
 def info(msg,quiet=False):
     if not quiet:
@@ -116,7 +116,7 @@ def setCmdStates(filename,n_toks=5):
     return oargs,cmdline_states_descr
 
 def extractRoutine():
-    states_dirs = [work_dir.getVal() + "/" + STATES_DIR_NAME + "/" + d for d in os.listdir(work_dir.getVal() + "/" + STATES_DIR_NAME)]
+    states_dirs = [work_dir.val + "/" + STATES_DIR_NAME + "/" + d for d in os.listdir(work_dir.val + "/" + STATES_DIR_NAME)]
     apps_dirs = [sd + "/" + APPS_DIR_NAME + "/" + d for sd in states_dirs for d in os.listdir(sd + "/" + APPS_DIR_NAME)]
 
     for d in apps_dirs:
@@ -164,7 +164,7 @@ def runRoutine():
             for k,s in cmdline_states_descr.iteritems():
                 print "\t\t" + k,":",s.val
 
-            curr_state_dir = work_dir.getVal() + "/" + STATES_DIR_NAME + "/" + str(counter)
+            curr_state_dir = work_dir.val + "/" + STATES_DIR_NAME + "/" + str(counter)
             info("creating directory '" + curr_state_dir + "' ...")
             if not os.path.isdir(curr_state_dir):
                 os.makedirs(curr_state_dir)
@@ -185,8 +185,8 @@ def runRoutine():
                 if not os.path.isdir(tgt_dir + "/" + app.LOGS_DIR):
                     os.makedirs(tgt_dir + "/" + app.LOGS_DIR)
 
-                for i in range(1,n_reps.getVal()+1):
-                    info("running app '" + tgt.name + "' (" + str(i) + " of " + str(n_reps.getVal()) + ") ...")
+                for i in range(1,n_reps.val+1):
+                    info("running app '" + tgt.name + "' (" + str(i) + " of " + str(n_reps.val) + ") ...")
                     tgt.run(cmdstate=True)
 
                     tgt_out_log = "/".join([tgt_dir,app.LOGS_DIR,str(i) + "_" + app.STDOUT_LOG])
@@ -206,43 +206,45 @@ if __name__ == "__main__":
     #parsing
     oarg.parse()
 
-    if not action.wasFound():
-        if hlp.getVal():
+    if not action.found:
+        if hlp.val:
             info("usage: baut [ACTION] {OPTIONS}\navaliable actions:\n\t" + "\n\t".join(actions))
             oarg.describeArgs("avaliable options:")
             exit()
         else:
-            error("no action specified\nuse '--help' for more information")
+            error("no action specified\nuse '-help' for more information")
 
-    #reloading oarg
+    #refreshing oarg
     oarg = reload(oarg)
+    #oarg.Container.oargs = []
+    #oarg.Oarg.invalid_options = []
 
-    if action.getVal() == "run":
+    if action.val == "run":
         from itertools import product
         from time import sleep
 
         baut_key = "[baut::run]"
 
-        hlp             = oarg.Oarg(bool,"-h --help",False,"This help message")
-        work_dir        = oarg.Oarg(str,"-w --work-dir",DEF_TESTS_DIR_NAME,"Directory to save results")
-        n_reps          = oarg.Oarg(int,"-r --reps --repetitions",1,"Number of repetitions for each iteration")
-        sliding         = oarg.Oarg(bool,"-s --sliding",False,"Activates sliding system states mode")
-        apps            = oarg.Oarg(str,"-a --apps","","Apps directories list")
+        hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
+        work_dir        = oarg.Oarg(str,"-w -work-dir",DEF_TESTS_DIR_NAME,"Directory to save results")
+        n_reps          = oarg.Oarg(int,"-r -reps --repetitions",1,"Number of repetitions for each iteration")
+        sliding         = oarg.Oarg(bool,"-s -sliding",False,"Activates sliding system states mode")
+        apps            = oarg.Oarg(str,"-a -apps","","Apps directories list")
 
         #keys sys states
-        sys_states_oargs,sys_states_descr = setSysStates(sys_states_file.getVal())
+        sys_states_oargs,sys_states_descr = setSysStates(sys_states_file.val)
         #keys cmd states
-        cmdline_states_oargs,cmdline_states_descr = setCmdStates(cmd_states_file.getVal())
+        cmdline_states_oargs,cmdline_states_descr = setCmdStates(cmd_states_file.val)
 
         if oarg.parse() != 0 and not all( i in opts for i in oarg.Oarg.invalid_options ):
              error("invalid options passed: " + ",".join(["'" + word + "'" for word in oarg.Oarg.invalid_options if not word in opts]))
 
-        if hlp.getVal():
+        if hlp.val:
             info("available options:")
             oarg.describeArgs()
             exit()
 
-        if not apps.wasFound():
+        if not apps.found:
             error("no apps specified") 
 
         #setting up apps
@@ -253,7 +255,7 @@ if __name__ == "__main__":
         _sys_states_vals = [sys_states_oargs[k].vals for k in sys_states_keys]
         sys_states = [sys_states_descr[k] for k in sys_states_keys]
 
-        if sliding.getVal():
+        if sliding.val:
             if len(set([len(i) for i in _sys_states_vals])) != 1:
                 error("Invalid arguments passed")
             sys_states_vals = zip(_sys_states_vals)
@@ -267,7 +269,7 @@ if __name__ == "__main__":
         cmdline_states = [cmdline_states_descr[k] for k in cmdline_states_keys]
     
         #number of iterations
-        n_its = len(sys_states_vals) * len(cmdline_states_vals) * n_reps.getVal()
+        n_its = len(sys_states_vals) * len(cmdline_states_vals) * n_reps.val
         
         #running apps
         info("will run " + str(n_its) + " iterations ...\n")
@@ -275,25 +277,25 @@ if __name__ == "__main__":
         runRoutine()
         exit()
 
-    elif action.getVal() == "extract":
+    elif action.val == "extract":
         baut_key = "[baut::extract]"
 
         #args
-        hlp      = oarg.Oarg(bool,"-h --help",False,"This help message")
-        work_dir = oarg.Oarg(str,"-w --work-dir",DEF_TESTS_DIR_NAME,"Directory to extract results")
-        exts     = oarg.Oarg(str,"--exts","","Extractors paths")
+        hlp      = oarg.Oarg(bool,"-h -help",False,"This help message")
+        work_dir = oarg.Oarg(str,"-w -work-dir",DEF_TESTS_DIR_NAME,"Directory to extract results")
+        exts     = oarg.Oarg(str,"-exts","","Extractors paths")
 
         if oarg.parse() != 0 and not all( i in opts for i in oarg.Oarg.invalid_options ):
              error("invalid options passed: " + ",".join(["'" + word + "'" for word in oarg.Oarg.invalid_options if not word in opts]))
 
-        if hlp.getVal():
+        if hlp.val:
             info("available options:")
             oarg.describeArgs()
             exit()
 
-        if not exts.wasFound():
+        if not exts.found:
             error("no extractors specified")
-        if not work_dir.wasFound():
+        if not work_dir.found:
             error("no target directory specified")
 
         extractors = [app.Extractor(path) for path in exts.vals if path != ""]
@@ -302,4 +304,4 @@ if __name__ == "__main__":
         exit()
 
     else:
-        error("invalid action specified.\nuse '--help' for more information")
+        error("invalid action '" + action.val + "' specified.\nuse '-help' for more information")
