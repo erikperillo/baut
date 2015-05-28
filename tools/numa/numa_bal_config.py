@@ -19,10 +19,7 @@ default		    = oarg.Oarg(bool,"-d -default",False,"Set all parameters to default
 hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
 
 #checking args validity
-if oarg.parse() != 0:
-    print "error: invalid arguments:"
-    print oarg.Oarg.invalid_options
-    exit()
+oarg.parse()
 
 if hlp.val:
     print "Avaliable options:"

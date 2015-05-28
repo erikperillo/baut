@@ -7,21 +7,21 @@ import subprocess as sp
 import os
 
 #definitions
-TOOLS_DIR_NAME          = "tools"
-DEF_TESTS_DIR_NAME      = "tests" + "/" + "".join(sp.Popen([TOOLS_DIR_NAME + "/date/" + "get_date_footprint.sh"],stdout=sp.PIPE).communicate()[0].splitlines())
-STATES_DIR_NAME         = "states"
-APPS_DIR_NAME           = "apps"
-STATE_DESCR_FILE        = "state.csv"
-BENCHMARK_APPS_DIR_NAME = "apps"
-NUMABAL_COMMOM_PATH     = "/proc/sys/kernel"
-NUMABAL_CONFIG_FILE     = "tools/numa/numa_bal_config.py"
-TIMES_FILE              = "times"
-VALS_FILE               = "raw_vals.csv"
-VALS_RESUME_FILE        = "vals_resume.csv"
-VALS_FILE_TRANSPOSED    = "raw_vals_transposed.csv"
-DEF_SYSSTATES_FILE      = "confs/sys_states.csv"
-DEF_CMDSTATES_FILE      = "confs/cmd_states.csv"
-COMPD_APP               = "tools/perftool/compd.py"
+FILE_DIR                    = os.path.dirname(os.path.realpath(__file__))
+TOOLS_DIR                   = FILE_DIR + "/" + "tools"
+DEF_TESTS_DIR               = FILE_DIR + "/" + "tests" + "/" + "".join(sp.Popen([TOOLS_DIR + "/date/" + "get_date_footprint.sh"],stdout=sp.PIPE).communicate()[0].splitlines())
+STATES_DIR_NAME             = "states"
+APPS_DIR_NAME               = "apps"
+STATE_DESCR_FILE_NAME       = "state.csv"
+NUMABAL_COMMOM_PATH         = "/proc/sys/kernel"
+NUMABAL_CONFIG_FILE         = FILE_DIR + "/" + "tools/numa/numa_bal_config.py"
+VALS_FILE_NAME              = "raw_vals.csv"
+VALS_RESUME_FILE            = "vals_resume.csv"
+VALS_FILE_NAME_TRANSPOSED   = "raw_vals_transposed.csv"
+DEF_SYSSTATES_FILE          = FILE_DIR + "/" + "confs/sys_states.csv"
+DEF_CMDSTATES_FILE          = FILE_DIR + "/" + "confs/cmd_states.csv"
+COMPD_APP                   = FILE_DIR + "/" + "tools/perftool/compd.py"
+ELAPSED_TIME_FILE_NAME      = "elapsed_s"
 
 #available actions
 actions = ["run","extract","resume"]
@@ -123,16 +123,52 @@ def setCmdStates(filename,n_toks=6):
     f.close()
     return oargs,cmdline_states_descr
 
+def estimatedTime():
+    n_its = len(sys_states_vals) * len(cmdline_states_vals) * n_reps.val
+    total_time = 0.0
+
+    for tgt in targets:
+        times_file = tgt.struct_dir + "/" + app.STATS_DIR_NAME + "/" + ELAPSED_TIME_FILE_NAME
+        if os.path.isfile(os.path.abspath(times_file)):
+            partial_time = 0.0
+            counter = 0
+            f = open(times_file,"r")
+            for line in f:
+                partial_time += float(line) if line != "" else 0.0
+                counter += 1
+            f.close()
+            total_time += n_its * (partial_time / counter)
+        else:
+            info("warning: could not get time estimation for app '" + tgt.name + "'")
+
+        return total_time
+
 def extractRoutine():
     states_dirs = [work_dir.val + "/" + STATES_DIR_NAME + "/" + d for d in os.listdir(work_dir.val + "/" + STATES_DIR_NAME)]
     apps_dirs = [sd + "/" + APPS_DIR_NAME + "/" + d for sd in states_dirs for d in os.listdir(sd + "/" + APPS_DIR_NAME)]
 
     for d in apps_dirs:
         info("in dir '" + d + "' ...")
+
+        if app_dir_save.val:
+            f = open(d + "/" + app.PATH_FILENAME,"r")
+            app_run_dir = f.read()
+            f.close()
+            if not os.path.isdir(app_run_dir + "/" + app.STATS_DIR_NAME):
+                info("creating stats dir '" + app_run_dir + "/" + app.STATS_DIR_NAME + "' ...")
+                os.makedirs(app_run_dir + "/" + app.STATS_DIR_NAME)
+            
         for ext in extractors:
             info("using extractor '" + ext.name + "' ...")
             line = []
             line.append(ext.name)
+
+            if app_dir_save.val:
+                if os.path.isfile(app_run_dir + "/" + app.STATS_DIR_NAME + "/" + ext.name) and app_stats_clear.val:
+                    os.remove(app_run_dir + "/" + app.STATS_DIR_NAME + "/" + ext.name)
+
+                sf = open(app_run_dir + "/" + app.STATS_DIR_NAME + "/" + ext.name,"a")
+                info("will write info to '" + app_run_dir + "/" + app.STATS_DIR_NAME + "/" + ext.name + "' ...")
 
             info("filtering files to use ...")
             filenames = [d + "/" + app.LOGS_DIR + "/" + f for f in os.listdir(d + "/" + app.LOGS_DIR) if f.find(ext.filter_key) >= 0]
@@ -142,21 +178,27 @@ def extractRoutine():
                 ext.extract(source=src)
                 src.close()
                 line.append(ext.out.replace("\n",""))
+                
+                if app_dir_save.val:
+                    sf.write(line[-1] + "\n")
+            
+            if app_dir_save.val:
+                sf.close()
 
-            info("writing in file '" + d + "/" + VALS_FILE_TRANSPOSED + "' ...")
-            f = open(d + "/" + VALS_FILE_TRANSPOSED,"a" if extractors.index(ext) > 0 else "w")
+            info("writing in file '" + d + "/" + VALS_FILE_NAME_TRANSPOSED + "' ...")
+            f = open(d + "/" + VALS_FILE_NAME_TRANSPOSED,"a" if extractors.index(ext) > 0 else "w")
             f.write(",".join(line) + "\n")
             f.close()
 
-        info("transposing '" + d + "/" + VALS_FILE_TRANSPOSED + "' ...")
-        transposeCSV(d + "/" + VALS_FILE_TRANSPOSED,d + "/" + VALS_FILE)
+        info("transposing '" + d + "/" + VALS_FILE_NAME_TRANSPOSED + "' ...")
+        transposeCSV(d + "/" + VALS_FILE_NAME_TRANSPOSED,d + "/" + VALS_FILE_NAME)
         print ""
 
 def runRoutine():
     counter = 1
     for ssv in sys_states_vals:
         for csv in cmdline_states_vals:
-            info("ITERATION " + str(counter) + ":")
+            info("STATE " + str(counter) + ":")
 
             info("setting system states...")
             for s,v in zip(sys_states,ssv):
@@ -177,8 +219,8 @@ def runRoutine():
             if not os.path.isdir(curr_state_dir):
                 os.makedirs(curr_state_dir)
             
-            info("creating state info file '" + curr_state_dir + "/" + STATE_DESCR_FILE + "' ...")
-            f = open(curr_state_dir + "/" + STATE_DESCR_FILE, "w")
+            info("creating state info file '" + curr_state_dir + "/" + STATE_DESCR_FILE_NAME + "' ...")
+            f = open(curr_state_dir + "/" + STATE_DESCR_FILE_NAME, "w")
             f.write(",".join(sys_states_keys + cmdline_states_keys) + "\n")
             f.write(",".join([str(s.val) for s in sys_states] + [str(s.val) for s in cmdline_states]) + "\n")
             f.close()
@@ -188,6 +230,11 @@ def runRoutine():
                 info("creating app dir '" + tgt_dir + "' ...")
                 if not os.path.isdir(tgt_dir):
                     os.makedirs(tgt_dir) 
+
+                info("creating file '" + tgt_dir + "/" + app.PATH_FILENAME + "' dir for later reference...")
+                f = open(tgt_dir + "/" + app.PATH_FILENAME,"w")
+                f.write(os.path.abspath(tgt.struct_dir))
+                f.close()
 
                 info("creating logs dir '" + tgt_dir + "/" + app.LOGS_DIR + "' ...")
                 if not os.path.isdir(tgt_dir + "/" + app.LOGS_DIR):
@@ -218,7 +265,7 @@ def resumeRoutine():
 
     for d in apps_dirs:
         info("reading data...")
-        fd = open(d + "/" + VALS_FILE,"r")
+        fd = open(d + "/" + VALS_FILE_NAME,"r")
         header = fd.read().replace("\n","").split(",")
         fd.close()
 
@@ -227,7 +274,7 @@ def resumeRoutine():
 
         for elem in header:
             try:
-                proc = sp.Popen([COMPD_APP,"--ds",d + "/" + VALS_FILE,"--cf","elapsed_s","--of"] + ([compd_arg_str.val.replace(","," ")] if compd_arg_str.found else ["(ds-av) (ds-ci)"]),stdout=sp.PIPE,stderr=sp.PIPE)
+                proc = sp.Popen([COMPD_APP,"--ds",d + "/" + VALS_FILE_NAME,"--cf","elapsed_s","--of"] + ([compd_arg_str.val.replace(","," ")] if compd_arg_str.found else ["(ds-av) (ds-ci)"]),stdout=sp.PIPE,stderr=sp.PIPE)
                 proc.wait()
                 info("result for '" + elem + "' in '" + d + "':")
                 ret = proc.communicate()[0]
@@ -242,7 +289,11 @@ def resumeRoutine():
 
 if __name__ == "__main__":
     #parsing
-    oarg.parse()
+
+    try:
+        oarg.parse()
+    except oarg.UnknownOptionsError:
+        pass
 
     if not action.found:
         if hlp.val:
@@ -254,8 +305,6 @@ if __name__ == "__main__":
 
     #refreshing oarg
     oarg = reload(oarg)
-    #oarg.Container.oargs = []
-    #oarg.Oarg.invalid_options = []
 
     if action.val == "run":
         from itertools import product
@@ -264,8 +313,7 @@ if __name__ == "__main__":
         baut_key = "[baut::run]"
 
         hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
-        work_dir        = oarg.Oarg(str,"-w -work-dir",DEF_TESTS_DIR_NAME,"Directory to save results")
-        #ovw_dir         = oarg.Oarg(bool,"-overwrite",False,"Ovewrites directory if already exists")
+        work_dir        = oarg.Oarg(str,"-w -work-dir",DEF_TESTS_DIR,"Directory to save results")
         n_reps          = oarg.Oarg(int,"-r -reps --repetitions",1,"Number of repetitions for each iteration") 
         sliding         = oarg.Oarg(bool,"-s -sliding",False,"Activates sliding system states mode")
         apps            = oarg.Oarg(str,"-a -apps","","Apps directories list")
@@ -275,8 +323,11 @@ if __name__ == "__main__":
         #keys cmd states
         cmdline_states_oargs,cmdline_states_descr = setCmdStates(cmd_states_file.val)
 
-        if oarg.parse() != 0 and not all( i in opts for i in oarg.Oarg.invalid_options ):
-             error("invalid options passed: " + ",".join(["'" + word + "'" for word in oarg.Oarg.invalid_options if not word in opts]))
+        try:
+            oarg.parse()
+        except oarg.UnknownOptionsError as e:
+            if not all(opt in opts for opt in e.opts):
+                raise e
 
         if hlp.val:
             info("available options:")
@@ -309,6 +360,8 @@ if __name__ == "__main__":
     
         #number of iterations
         n_its = len(sys_states_vals) * len(cmdline_states_vals) * n_reps.val
+        #estimating time
+        info("estimated time is " + str(estimatedTime()) + " seconds")
         
         #running apps
         info("will run " + str(n_its) + " iterations ...\n")
@@ -323,9 +376,14 @@ if __name__ == "__main__":
         hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
         work_dir        = oarg.Oarg(str,"-w -work-dir","","Directory to extract results")
         exts            = oarg.Oarg(str,"-exts","","Extractors paths")
+        app_dir_save    = oarg.Oarg(bool,"-record",False,"Records results in apps stats directory")
+        app_stats_clear = oarg.Oarg(bool,"-clear",False,"Clear app stats dir")
 
-        if oarg.parse() != 0 and not all( i in opts for i in oarg.Oarg.invalid_options ):
-             error("invalid options passed: " + ",".join(["'" + word + "'" for word in oarg.Oarg.invalid_options if not word in opts]))
+        try:
+            oarg.parse()
+        except oarg.UnknownOptionsError as e:
+            if not all(opt in opts for opt in e.opts):
+                raise e
 
         if hlp.val:
             info("available options:")
@@ -351,8 +409,11 @@ if __name__ == "__main__":
         work_dir = oarg.Oarg(str,"-w -work-dir","","Directory to extract results")
         compd_arg_str   = oarg.Oarg(str,"-s -compd-str","","Compd string to pass directly to program")
 
-        if oarg.parse() != 0 and not all( i in opts for i in oarg.Oarg.invalid_options ):
-             error("invalid options passed: " + ",".join(["'" + word + "'" for word in oarg.Oarg.invalid_options if not word in opts]))
+        try:
+            oarg.parse()
+        except oarg.UnknownOptionsError as e:
+            if not all(opt in opts for opt in e.opts):
+                raise e
 
         if hlp.val:
             info("available options:")

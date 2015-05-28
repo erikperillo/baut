@@ -14,6 +14,8 @@ LOGS_DIR            = "logs"
 APP_CONFIGS_DIRNAME = "confs"
 EXT_FILTER_FILE     = "filter_stdout"
 APP_RESUME_DIRNAME  = "resume"
+PATH_FILENAME       = "app_path"
+STATS_DIR_NAME      = "stats"
 
 def createStruct(path, files=[CMD_FILENAME,TIMES_FILENAME]):
     """ creates a struct for an app with necessary information for it to be run.
@@ -44,7 +46,7 @@ class App:
         if os.path.isfile(struct_dir + "/" + OPT_CONFIG_FILENAME):
             sp.Popen([struct_dir + "/" + OPT_CONFIG_FILENAME]).wait() 
              
-        self.struct_dir = struct_dir
+        self.struct_dir = os.path.abspath(struct_dir)
         self.process    = None
         self.run_dir    = ""
         self.out        = ""

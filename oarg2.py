@@ -1,8 +1,32 @@
+"""
+Copyright (c) 2015, Erik Perillo
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
+
 import sys
 import re
 
+class UnknownOptionsError(Exception):
+    def __init__(self,message,opts):
+        Exception.__init__(self,message)
+        self.opts = opts 
+
+class RepeatedKeyError(Exception):
+    def __init__(self,message,key):
+        Exception.__init__(self,message)
+        self.key = key 
+
 class Oarg:
-    invalid_options = []
     oargs = []
 
     def __init__(self, tp, names, def_val, description, pos_n_found=-1):
@@ -14,6 +38,12 @@ class Oarg:
         self.found        = False
         self.str_vals     = []
         self.vals         = (def_val,)
+
+        for name in self.names:
+            for oarg in Oarg.oargs:
+                if name in oarg.names:
+                    raise RepeatedKeyError("Key '" + Oarg.clName(name) + "' already exists",Oarg.clName(name))
+
         Oarg.oargs.append(self)
 
     @property
@@ -44,8 +74,9 @@ class Oarg:
         return (name[0] == "-" and (ord(name[1]) < 48 or ord(name[1]) > 57)) if len(name) > 1 else False
 
 def parse(source=sys.argv,falses=["false","no","n","0"]):
+    invalid_options = []
+
     _src = list(source)[1:] #assuming first argument is program's name
-    
     for i,elem in enumerate(_src):
         _elem = re.sub(r'(?<!\\),',',,',elem)
         _src[i] = re.sub(r'\\,',',',_elem)
@@ -69,13 +100,11 @@ def parse(source=sys.argv,falses=["false","no","n","0"]):
         if ("-" + cands[0]) in sys.argv:
             opt = cands[0]
             args = cands[1:]
-            #print "\topt:",opt
-            #print "\targs:",args
             if opt in oargs_dict:
                 oarg = oargs_dict[opt]
                 oarg.setVals(args,falses)
             else:
-                Oarg.invalid_options.append(opt)
+                invalid_options.append(Oarg.clName(opt))
         else:
             remaining_partial = [_cand[0]] + remaining_partial
 
@@ -93,7 +122,8 @@ def parse(source=sys.argv,falses=["false","no","n","0"]):
         remaining = remaining[1:]
         left_oargs = left_oargs[1:]
 
-    return len(Oarg.invalid_options)
+    if len(invalid_options) > 0:
+        raise UnknownOptionsError("Invalid options passed: " + ",".join(invalid_options),invalid_options)
 
 def describeArgs(helpmsg="",width=48):
     if helpmsg != "":
