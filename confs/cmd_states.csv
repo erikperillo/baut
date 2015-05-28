@@ -1,3 +1,5 @@
-#name,cmd,priority,oarg_keys,oarg_description
-timer,/usr/bin/time -p,0,-timer,Prints times of execution
-interleave,numactl -interleave=all,1,-interleave,activates interleaving memory policy
+#name,cmd,def_active,priority,oarg_keys,oarg_description
+timer,/usr/bin/time -p,True,0,-timer,Prints times of execution
+perf,perf stat,False,1,-perf,Activates perf tool
+interleave,numactl --interleave=all,False,2,-interleave,Activates interleaving memory policy
+

@@ -16,26 +16,31 @@ BENCHMARK_APPS_DIR_NAME = "apps"
 NUMABAL_COMMOM_PATH     = "/proc/sys/kernel"
 NUMABAL_CONFIG_FILE     = "tools/numa/numa_bal_config.py"
 TIMES_FILE              = "times"
-VALS_FILE               = "vals.csv"
-VALS_FILE_TRANSPOSED    = "vals_transposed.csv"
+VALS_FILE               = "raw_vals.csv"
+VALS_RESUME_FILE        = "vals_resume.csv"
+VALS_FILE_TRANSPOSED    = "raw_vals_transposed.csv"
 DEF_SYSSTATES_FILE      = "confs/sys_states.csv"
 DEF_CMDSTATES_FILE      = "confs/cmd_states.csv"
+COMPD_APP               = "tools/perftool/compd.py"
 
-#avaliable actions
-actions = ["run","extract"]
+#available actions
+actions = ["run","extract","resume"]
 
 #key for info method
 baut_key = "[baut]"
 
+#compd default string
+compd_def_str = "(ds-av) (ds-ci)"
+
 #command line arguments
-action          = oarg.Oarg(str,"-a -action","","Action to execute",0)
+action          = oarg.Oarg(str,"-action","","Action to execute",0)
 quiet           = oarg.Oarg(bool,"-q -quiet",False,"Does not run so verbose")
 sys_states_file = oarg.Oarg(str,"-sf -sys-states-file",DEF_SYSSTATES_FILE,"System states file (run mode)")
 cmd_states_file = oarg.Oarg(str,"-cf -cmd-states-file",DEF_CMDSTATES_FILE,"Command line states file (run mode)")
 hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
 
 #options
-opts            = ["-cf","-cmd-states-file","-sf","-sys-states-file","-q","-quiet","-a","-action"]
+opts            = ["-cf","-cmd-states-file","-sf","-sys-states-file","-q","-quiet","-action"]
 
 def info(msg,quiet=False):
     if not quiet:
@@ -44,6 +49,9 @@ def info(msg,quiet=False):
 def error(msg,errn=1):
     info("error: " + msg)
     exit(errn)
+
+def strTrue(string,falses=["0","no","n","false"]):
+    return not string.lower() in falses
 
 def transposeCSV(file_in,file_out):
     import csv
@@ -88,7 +96,7 @@ def setSysStates(filename,n_toks=8):
 
     return oargs,sys_states_descr
 
-def setCmdStates(filename,n_toks=5):
+def setCmdStates(filename,n_toks=6):
     oargs = {}
     cmdline_states_descr = {}
     counter = 1
@@ -104,10 +112,10 @@ def setCmdStates(filename,n_toks=5):
         if len(toks) != n_toks:
             error("wrong format in configuration file '" + filename + "' at line " + str(counter))
 
-        name,cmd,priority = toks[:3]
-        keys,descr = toks[3:]
+        name,cmd,def_active,priority = toks[:4]
+        keys,descr = toks[4:]
         
-        oargs.update({ name: oarg.Oarg(bool,str(keys),True,str(descr)) })
+        oargs.update({ name: oarg.Oarg(bool,str(keys),strTrue(def_active),str(descr)) })
         cmdline_states_descr.update({ name: st.CmdState(cmd.split(),int(priority)) })
 
         counter += 1
@@ -186,7 +194,7 @@ def runRoutine():
                     os.makedirs(tgt_dir + "/" + app.LOGS_DIR)
 
                 for i in range(1,n_reps.val+1):
-                    info("running app '" + tgt.name + "' (" + str(i) + " of " + str(n_reps.val) + ") ...")
+                    info("running app '" + tgt.name + "' (" + str(i) + " out of " + str(n_reps.val) + ") ...")
                     tgt.run(cmdstate=True)
 
                     tgt_out_log = "/".join([tgt_dir,app.LOGS_DIR,str(i) + "_" + app.STDOUT_LOG])
@@ -202,14 +210,44 @@ def runRoutine():
             counter += 1
             print ""
 
+def resumeRoutine():
+    states_dirs = [work_dir.val + "/" + STATES_DIR_NAME + "/" + d for d in os.listdir(work_dir.val + "/" + STATES_DIR_NAME)]
+    apps_dirs = [sd + "/" + APPS_DIR_NAME + "/" + d for sd in states_dirs for d in os.listdir(sd + "/" + APPS_DIR_NAME)]
+    
+    compd_fmt_str = compd_arg_str.val.replace(","," ") if compd_arg_str.found else compd_def_str
+
+    for d in apps_dirs:
+        info("reading data...")
+        fd = open(d + "/" + VALS_FILE,"r")
+        header = fd.read().replace("\n","").split(",")
+        fd.close()
+
+        info("creating file '" + d + "/" + VALS_RESUME_FILE + "' ...")
+        fr = open(d + "/" + VALS_RESUME_FILE,"a")
+
+        for elem in header:
+            try:
+                proc = sp.Popen([COMPD_APP,"--ds",d + "/" + VALS_FILE,"--cf","elapsed_s","--of"] + ([compd_arg_str.val.replace(","," ")] if compd_arg_str.found else ["(ds-av) (ds-ci)"]),stdout=sp.PIPE,stderr=sp.PIPE)
+                proc.wait()
+                info("result for '" + elem + "' in '" + d + "':")
+                ret = proc.communicate()[0]
+            except ZeroDivisionError:
+                ret = ["0"] * len(compd_fmt_str) 
+                pass 
+
+            line = elem + "," + ",".join(ret.split())
+            fr.write(line)
+
+        fr.close()
+
 if __name__ == "__main__":
     #parsing
     oarg.parse()
 
     if not action.found:
         if hlp.val:
-            info("usage: baut [ACTION] {OPTIONS}\navaliable actions:\n\t" + "\n\t".join(actions))
-            oarg.describeArgs("avaliable options:")
+            info("usage: baut [ACTION] {OPTIONS}\n\navailable actions:\n\t" + "\n\t".join(actions))
+            oarg.describeArgs("\navailable options:")
             exit()
         else:
             error("no action specified\nuse '-help' for more information")
@@ -227,7 +265,8 @@ if __name__ == "__main__":
 
         hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
         work_dir        = oarg.Oarg(str,"-w -work-dir",DEF_TESTS_DIR_NAME,"Directory to save results")
-        n_reps          = oarg.Oarg(int,"-r -reps --repetitions",1,"Number of repetitions for each iteration")
+        #ovw_dir         = oarg.Oarg(bool,"-overwrite",False,"Ovewrites directory if already exists")
+        n_reps          = oarg.Oarg(int,"-r -reps --repetitions",1,"Number of repetitions for each iteration") 
         sliding         = oarg.Oarg(bool,"-s -sliding",False,"Activates sliding system states mode")
         apps            = oarg.Oarg(str,"-a -apps","","Apps directories list")
 
@@ -281,9 +320,9 @@ if __name__ == "__main__":
         baut_key = "[baut::extract]"
 
         #args
-        hlp      = oarg.Oarg(bool,"-h -help",False,"This help message")
-        work_dir = oarg.Oarg(str,"-w -work-dir",DEF_TESTS_DIR_NAME,"Directory to extract results")
-        exts     = oarg.Oarg(str,"-exts","","Extractors paths")
+        hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
+        work_dir        = oarg.Oarg(str,"-w -work-dir","","Directory to extract results")
+        exts            = oarg.Oarg(str,"-exts","","Extractors paths")
 
         if oarg.parse() != 0 and not all( i in opts for i in oarg.Oarg.invalid_options ):
              error("invalid options passed: " + ",".join(["'" + word + "'" for word in oarg.Oarg.invalid_options if not word in opts]))
@@ -301,6 +340,31 @@ if __name__ == "__main__":
         extractors = [app.Extractor(path) for path in exts.vals if path != ""]
 
         extractRoutine()
+        exit()
+
+    elif action.val == "resume":
+        #import pylab
+
+        baut_key = "[baut::resume]"
+
+        hlp      = oarg.Oarg(bool,"-h -help",False,"This help message")
+        work_dir = oarg.Oarg(str,"-w -work-dir","","Directory to extract results")
+        compd_arg_str   = oarg.Oarg(str,"-s -compd-str","","Compd string to pass directly to program")
+
+        if oarg.parse() != 0 and not all( i in opts for i in oarg.Oarg.invalid_options ):
+             error("invalid options passed: " + ",".join(["'" + word + "'" for word in oarg.Oarg.invalid_options if not word in opts]))
+
+        if hlp.val:
+            info("available options:")
+            oarg.describeArgs()
+            exit()
+
+        if not work_dir.found:
+            error("no target directory specified")
+
+        info("not completely implemented yet")
+        #info("will resume in directory '" + work_dir.val + "' ...")
+        #resumeRoutine()
         exit()
 
     else:
