@@ -22,9 +22,11 @@ DEF_SYSSTATES_FILE          = FILE_DIR + "/" + "confs/sys_states.csv"
 DEF_CMDSTATES_FILE          = FILE_DIR + "/" + "confs/cmd_states.csv"
 COMPD_APP                   = FILE_DIR + "/" + "tools/perftool/compd.py"
 ELAPSED_TIME_FILE_NAME      = "elapsed_s"
+APP_STATS_DIR_NAME          = "stats"
+STATES_STATS_DIR_NAME       = "stats"
 
 #available actions
-actions = ["run","extract","resume"]
+actions = ["run","extract","stats"]
 
 #key for info method
 baut_key = "[baut]"
@@ -141,7 +143,14 @@ def estimatedTime():
         else:
             info("warning: could not get time estimation for app '" + tgt.name + "'")
 
-        return total_time
+    return total_time
+
+def formatTime(seconds):
+    seconds = int(seconds) 
+    hours = seconds / 3600
+    minutes = (seconds % 3600) / 60
+    seconds = seconds % 60 
+    return hours,minutes,seconds
 
 def extractRoutine():
     states_dirs = [work_dir.val + "/" + STATES_DIR_NAME + "/" + d for d in os.listdir(work_dir.val + "/" + STATES_DIR_NAME)]
@@ -231,7 +240,7 @@ def runRoutine():
                 if not os.path.isdir(tgt_dir):
                     os.makedirs(tgt_dir) 
 
-                info("creating file '" + tgt_dir + "/" + app.PATH_FILENAME + "' dir for later reference...")
+                info("creating file '" + tgt_dir + "/" + app.PATH_FILENAME + "' for later reference...")
                 f = open(tgt_dir + "/" + app.PATH_FILENAME,"w")
                 f.write(os.path.abspath(tgt.struct_dir))
                 f.close()
@@ -257,35 +266,46 @@ def runRoutine():
             counter += 1
             print ""
 
-def resumeRoutine():
-    states_dirs = [work_dir.val + "/" + STATES_DIR_NAME + "/" + d for d in os.listdir(work_dir.val + "/" + STATES_DIR_NAME)]
-    apps_dirs = [sd + "/" + APPS_DIR_NAME + "/" + d for sd in states_dirs for d in os.listdir(sd + "/" + APPS_DIR_NAME)]
-    
-    compd_fmt_str = compd_arg_str.val.replace(","," ") if compd_arg_str.found else compd_def_str
+def statsRoutine():
+    states_dirs = [os.path.abspath(work_dir.val) + "/" + STATES_DIR_NAME + "/" + d for d in os.listdir(os.path.abspath(work_dir.val) + "/" + STATES_DIR_NAME)]
 
-    for d in apps_dirs:
-        info("reading data...")
-        fd = open(d + "/" + VALS_FILE_NAME,"r")
-        header = fd.read().replace("\n","").split(",")
-        fd.close()
+    for sd in states_dirs: 
+        state_stats_dir = sd + "/" + STATES_STATS_DIR_NAME
+        if not os.path.isdir(state_stats_dir):
+            info("creating directory '" + state_stats_dir + "' ...")
+            os.makedirs(state_stats_dir)
 
-        info("creating file '" + d + "/" + VALS_RESUME_FILE + "' ...")
-        fr = open(d + "/" + VALS_RESUME_FILE,"a")
+        apps_dirs = [sd + "/" + APPS_DIR_NAME + "/" + d for d in os.listdir(sd + "/" + APPS_DIR_NAME)]
 
-        for elem in header:
-            try:
-                proc = sp.Popen([COMPD_APP,"--ds",d + "/" + VALS_FILE_NAME,"--cf","elapsed_s","--of"] + ([compd_arg_str.val.replace(","," ")] if compd_arg_str.found else ["(ds-av) (ds-ci)"]),stdout=sp.PIPE,stderr=sp.PIPE)
-                proc.wait()
-                info("result for '" + elem + "' in '" + d + "':")
-                ret = proc.communicate()[0]
-            except ZeroDivisionError:
-                ret = ["0"] * len(compd_fmt_str) 
-                pass 
+        for ad in apps_dirs:
+            app_stats_dir = ad + "/" + APP_STATS_DIR_NAME
 
-            line = elem + "," + ",".join(ret.split())
-            fr.write(line)
+            if not os.path.isdir(app_stats_dir):
+                info("creating directory '" + app_stats_dir + "' ...")
+                os.makedirs(app_stats_dir)
 
-        fr.close()
+            info("reading data in '" + app_stats_dir + "' ...")
+            with open(ad + "/" + VALS_FILE_NAME_TRANSPOSED,"r") as csv_file:
+                for line in csv_file:
+                    toks = line.replace("\n","").split(",")
+                    name = toks[0]
+                    vals = [float(t) for t in toks[1:] if t != ""]
+                    measures = dict( (key,stats.ops[key](vals)) for key in stat_measures.vals ) 
+                    
+                    info("writing stats to '" + app_stats_dir + "/" + name + ".csv" + "' ...")
+                    with open(app_stats_dir + "/" + name + ".csv","w") as f:
+                        f.write(",".join([ key for key in measures ]) + "\n")
+                        f.write(",".join([ str(measures[key]) for key in measures ]) + "\n") 
+                    
+                    if not os.path.isfile(state_stats_dir + "/" + name + ".csv"):
+                        info("creating file '" + state_stats_dir + "/" + name + ".csv" + "' ...")
+                        with open(state_stats_dir + "/" + name + ".csv","w") as f:
+                            f.write(",".join(["app"] + [key for key in measures]) + "\n")
+
+                    info("writing stats to '" + state_stats_dir + "/" + name + ".csv" + "' ...")
+                    with open(state_stats_dir + "/" + name + ".csv","a") as sf:
+                        sf.write(",".join([os.path.basename(ad)] + [str(measures[key]) for key in measures ]) + "\n")
+                 
 
 if __name__ == "__main__":
     #parsing
@@ -361,7 +381,8 @@ if __name__ == "__main__":
         #number of iterations
         n_its = len(sys_states_vals) * len(cmdline_states_vals) * n_reps.val
         #estimating time
-        info("estimated time is " + str(estimatedTime()) + " seconds")
+        hours,minutes,seconds = [str(t) for t in formatTime(estimatedTime())]
+        info("estimated time is " + hours + "h" + minutes + "m" + seconds + "s")
         
         #running apps
         info("will run " + str(n_its) + " iterations ...\n")
@@ -400,14 +421,15 @@ if __name__ == "__main__":
         extractRoutine()
         exit()
 
-    elif action.val == "resume":
+    elif action.val == "stats":
+        import core.stats as stats
         #import pylab
 
-        baut_key = "[baut::resume]"
+        baut_key = "[baut::stats]"
 
-        hlp      = oarg.Oarg(bool,"-h -help",False,"This help message")
-        work_dir = oarg.Oarg(str,"-w -work-dir","","Directory to extract results")
-        compd_arg_str   = oarg.Oarg(str,"-s -compd-str","","Compd string to pass directly to program")
+        hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
+        work_dir        = oarg.Oarg(str,"-w -work-dir","","Directory to extract results")
+        stat_measures   = oarg.Oarg(str,"-m -measures","mean","Statistical measures to use")
 
         try:
             oarg.parse()
@@ -416,16 +438,20 @@ if __name__ == "__main__":
                 raise e
 
         if hlp.val:
-            info("available options:")
+            info("available command line options:")
             oarg.describeArgs()
+            print "\navailable measures:\n" + "\n".join([ "\t" + k for k in stats.ops ]) 
             exit()
 
         if not work_dir.found:
             error("no target directory specified")
 
-        info("not completely implemented yet")
-        #info("will resume in directory '" + work_dir.val + "' ...")
-        #resumeRoutine()
+        if not all(m in stats.ops for m in stat_measures.vals):
+            error("invalid statistical measure\nuse '-help' for more information")
+
+        #info("not completely implemented yet")
+        info("will resume in directory '" + work_dir.val + "' ...")
+        statsRoutine()
         exit()
 
     else:
