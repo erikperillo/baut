@@ -20,7 +20,6 @@ VALS_RESUME_FILE            = "vals_resume.csv"
 VALS_FILE_NAME_TRANSPOSED   = "raw_vals_transposed.csv"
 DEF_SYSSTATES_FILE          = FILE_DIR + "/" + "confs/sys_states.csv"
 DEF_CMDSTATES_FILE          = FILE_DIR + "/" + "confs/cmd_states.csv"
-COMPD_APP                   = FILE_DIR + "/" + "tools/perftool/compd.py"
 ELAPSED_TIME_FILE_NAME      = "elapsed_s"
 APP_STATS_DIR_NAME          = "stats"
 STATES_STATS_DIR_NAME       = "stats"
@@ -30,9 +29,6 @@ actions = ["run","extract","stats"]
 
 #key for info method
 baut_key = "[baut]"
-
-#compd default string
-compd_def_str = "(ds-av) (ds-ci)"
 
 #command line arguments
 action          = oarg.Oarg(str,"-action","","Action to execute",0)
