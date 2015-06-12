@@ -23,9 +23,12 @@ DEF_CMDSTATES_FILE          = FILE_DIR + "/" + "confs/cmd_states.csv"
 ELAPSED_TIME_FILE_NAME      = "elapsed_s"
 APP_STATS_DIR_NAME          = "stats"
 STATES_STATS_DIR_NAME       = "stats"
+PLOTS_DIR_NAME              = "plots"
+PLOTS_FILES_EXT             = ".pdf"
+ALL_FIGS_PLOT_FILE_NAME     = "all" 
 
 #available actions
-actions = ["run","extract","stats"]
+actions = ["run","extract","stats","plot"]
 
 #key for info method
 baut_key = "[baut]"
@@ -40,18 +43,18 @@ hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
 #options
 opts            = ["-cf","-cmd-states-file","-sf","-sys-states-file","-q","-quiet","-action"]
 
-def info(msg,quiet=False):
+def info(msg, quiet=False):
     if not quiet:
         print baut_key + " " + msg
 
-def error(msg,errn=1):
+def error(msg, errn=1):
     info("error: " + msg)
     exit(errn)
 
-def strTrue(string,falses=["0","no","n","false"]):
+def strTrue(string, falses=["0","no","n","false"]):
     return not string.lower() in falses
 
-def transposeCSV(file_in,file_out):
+def transposeCSV(file_in, file_out):
     import csv
 
     f,ft = open(file_in,"r"),open(file_out,"w")
@@ -64,7 +67,7 @@ def transposeCSV(file_in,file_out):
     f.close()
     ft.close()
 
-def setSysStates(filename,n_toks=8):
+def setSysStates(filename, n_toks=8):
     oargs = {}
     sys_states_descr = {}
     counter = 1
@@ -94,7 +97,7 @@ def setSysStates(filename,n_toks=8):
 
     return oargs,sys_states_descr
 
-def setCmdStates(filename,n_toks=6):
+def setCmdStates(filename, n_toks=6):
     oargs = {}
     cmdline_states_descr = {}
     counter = 1
@@ -303,6 +306,85 @@ def statsRoutine():
                         sf.write(",".join([os.path.basename(ad)] + [str(measures[key]) for key in measures ]) + "\n")
                  
 
+def plotRoutine():
+    plot_colors = [tuple([k*i for i in (a,b,c)]) for k in (1,0.5) for (a,b,c) in [(0,0,1),(0,1,0),(1,0,0),(0,1,1),(1,1,0),(0,1,0)]]
+    plots_dir = os.path.abspath(work_dir.val + "/" + PLOTS_DIR_NAME)
+
+    if not os.path.isdir(plots_dir):
+        info("creating directory '" + plots_dir + "' ...")
+        os.makedirs(plots_dir)
+
+    states_dirs = [os.path.abspath(work_dir.val) + "/" + STATES_DIR_NAME + "/" + d for d in os.listdir(os.path.abspath(work_dir.val) + "/" + STATES_DIR_NAME)]
+
+    x_vals = []
+    y_vals = {}
+    
+    for sd in states_dirs:
+        info("working in '" + sd + "' ...")
+        with open(sd + "/" + STATE_DESCR_FILE_NAME,"r") as state_file:
+            states_names = state_file.readline().replace("\n","").split(",")
+            if not x_axis.val in states_names:
+                error("no such state '" + x_axis.val + "' in file '" + sd + "/" + STATE_DESCR_FILE_NAME)
+            index = states_names.index(x_axis.val)
+            states_vals = state_file.readline().replace("\n","").split(",")
+            x_vals.append(float(states_vals[index]))    
+
+        apps_dirs = [sd + "/" + APPS_DIR_NAME + "/" + d for d in os.listdir(sd + "/" + APPS_DIR_NAME)]
+        for ad in apps_dirs:
+            app_name = os.path.basename(ad)
+
+            info("getting info about app '" + app_name + "' ...")
+            if not app_name in y_vals:
+                y_vals[app_name] = []
+
+            app_stats_dir = ad + "/" + APP_STATS_DIR_NAME
+            with open(app_stats_dir + "/" + y_axis.val + ".csv","r") as yval_file:
+                stats_names = yval_file.readline().replace("\n","").split(",")
+                if not y_stat.val in stats_names:
+                    error("no such statistical measure '" + y_stat.val + "' in file '" + app_stats_dir + "/" + y_axis.val + ".csv")
+                index = stats_names.index(y_stat.val)
+                stats_vals = yval_file.readline().replace("\n","").split(",")
+                stat_value = float(stats_vals[index])
+
+                if y_err.found:
+                    if not y_err.val in stats_names:
+                        error("no such statistical measure '" + y_err.val + "' in file '" + app_stats_dir + "/" + y_axis.val + ".csv")
+                    index = stats_names.index(y_err.val)
+                    y_vals[app_name].append((stat_value,float(stats_vals[index])))
+                else:
+                    y_vals[app_name].append((stat_value,0))
+
+    info("sorting values...")
+    for key in y_vals:
+        y_vals[key] = [ y for (x,y) in sorted(zip(x_vals,y_vals[key])) ]
+    x_vals.sort()
+
+    to_plot = [(key,) for key in y_vals]
+    to_plot += [sum(to_plot,())] if len(y_vals) > 1 else []
+
+    info("plotting...")
+    for ylabels in to_plot:
+        for key,color in zip(ylabels,plot_colors):
+            Y = [ i for i,_ in y_vals[key] ]
+            Y_errs = [ i for _,i in y_vals[key] ]
+            pylab.errorbar(x_vals,Y,yerr=Y_errs,color=color,ecolor="r",label=key)
+
+        pylab.xlabel(x_axis.val)
+        pylab.ylabel(y_axis.val + " " + y_stat.val)
+        pylab.xticks(x_vals)
+        pylab.legend() 
+        pylab.grid()
+
+        filename = (ylabels[0] if len(ylabels) == 1 else ALL_FIGS_PLOT_FILE_NAME) + "_" + x_axis.val + "_vs_" + y_axis.val + PLOTS_FILES_EXT
+        info("saving plot to '" + work_dir.val + "/" + PLOTS_DIR_NAME + "/" + filename + "' ...")
+        pylab.savefig(work_dir.val + "/" + PLOTS_DIR_NAME + "/" + filename, bbox_inches="tight")
+
+        if (len(ylabels) > 1 or len(y_vals) == 1) and show_plot.val:
+            info("displaying resume of results:")
+            pylab.show()    
+
+    info("all results saved to '" + work_dir.val + "/" + PLOTS_DIR_NAME + "'")
+
 if __name__ == "__main__":
     #parsing
 
@@ -419,7 +501,6 @@ if __name__ == "__main__":
 
     elif action.val == "stats":
         import core.stats as stats
-        #import pylab
 
         baut_key = "[baut::stats]"
 
@@ -442,12 +523,48 @@ if __name__ == "__main__":
         if not work_dir.found:
             error("no target directory specified")
 
-        if not all(m in stats.ops for m in stat_measures.vals):
+        if stat_measures.val == "all":
+            stat_measures.vals = tuple(k for k in stats.ops)
+        elif not all(m in stats.ops for m in stat_measures.vals):
             error("invalid statistical measure\nuse '-help' for more information")
 
-        #info("not completely implemented yet")
         info("will resume in directory '" + work_dir.val + "' ...")
         statsRoutine()
+        exit()
+
+    elif action.val == "plot":
+        import pylab 
+
+        baut_key = "[baut::plot]"
+
+        hlp             = oarg.Oarg(bool,"-h -help",False,"This help message")
+        work_dir        = oarg.Oarg(str,"-w -work-dir","","Directory to extract results")
+        x_axis          = oarg.Oarg(str,"-x","","x axis field name to be used")
+        y_axis          = oarg.Oarg(str,"-y","","y axis field name to be used")
+        y_stat          = oarg.Oarg(str,"-ystat","mean","y axis statistical value to be used")
+        y_err           = oarg.Oarg(str,"-yerr","","y axis error field name to be used")
+        show_plot       = oarg.Oarg(bool,"-show",False,"Show all plots on screen when finished")
+
+        try:
+            oarg.parse()
+        except oarg.UnknownOptionsError as e:
+            if not all(opt in opts for opt in e.opts):
+                raise e
+
+        if hlp.val:
+            info("available options:")
+            oarg.describeArgs()
+            exit()
+
+        if not work_dir.found:
+            error("no target directory specified")
+        if not x_axis.found:
+            error("no axis x name specified")
+        if not y_axis.found:
+            error("no axis y name specified")
+
+        info("will plot fields in directory '" + work_dir.val + "' ...")
+        plotRoutine()
         exit()
 
     else:

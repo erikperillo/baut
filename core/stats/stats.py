@@ -20,4 +20,5 @@ def cin(arr, confidence=0.95):
     cin = sem * sp.t._ppf((1+confidence)/2., n-1)
     return cin
 
+#valid operations for module
 ops = {"std":std, "mean":mean, "var":var, "cin":cin}

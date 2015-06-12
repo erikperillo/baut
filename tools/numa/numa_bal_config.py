@@ -1,8 +1,8 @@
 #!/usr/bin/python
 #sets automatic numa balancing parameters
 
-import sys
-sys.path.append("../..")
+import sys,os
+sys.path.append(os.path.join(os.path.dirname(__file__),"..",".."))
 import oarg2 as oarg
 
 NUMA_BALANCING_COMMON="/proc/sys/kernel/numa_balancing"
