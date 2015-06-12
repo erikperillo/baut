@@ -129,17 +129,21 @@ def estimatedTime():
     total_time = 0.0
 
     for tgt in targets:
-        times_file = tgt.struct_dir + "/" + app.STATS_DIR_NAME + "/" + ELAPSED_TIME_FILE_NAME
-        if os.path.isfile(os.path.abspath(times_file)):
-            partial_time = 0.0
-            counter = 0
-            f = open(times_file,"r")
-            for line in f:
-                partial_time += float(line) if line != "" else 0.0
-                counter += 1
-            f.close()
-            total_time += n_its * (partial_time / counter)
-        else:
+        estim_success = tgt.struct_dir != None
+        if tgt.struct_dir != None:
+            times_file = tgt.struct_dir + "/" + app.STATS_DIR_NAME + "/" + ELAPSED_TIME_FILE_NAME
+            if os.path.isfile(os.path.abspath(times_file)):
+                partial_time = 0.0
+                counter = 0
+                f = open(times_file,"r")
+                for line in f:
+                    partial_time += float(line) if line != "" else 0.0
+                    counter += 1
+                f.close()
+                total_time += n_its * (partial_time / counter)
+            else:
+                estim_success = False
+        if not estim_success:
             info("warning: could not get time estimation for app '" + tgt.name + "'")
 
     return total_time
@@ -182,9 +186,9 @@ def extractRoutine():
             filenames = [d + "/" + app.LOGS_DIR + "/" + f for f in os.listdir(d + "/" + app.LOGS_DIR) if f.find(ext.filter_key) >= 0]
             for fn in filenames:
                 info("extracting information from '" + fn + "' ...")
-                src = open(fn,"r")
-                ext.extract(source=src)
-                src.close()
+                with open(fn,"r") as src:
+                    ext.extract(source=src)
+
                 line.append(ext.out.replace("\n",""))
                 
                 if app_dir_save.val:
@@ -239,10 +243,11 @@ def runRoutine():
                 if not os.path.isdir(tgt_dir):
                     os.makedirs(tgt_dir) 
 
-                info("creating file '" + tgt_dir + "/" + app.PATH_FILENAME + "' for later reference...")
-                f = open(tgt_dir + "/" + app.PATH_FILENAME,"w")
-                f.write(os.path.abspath(tgt.struct_dir))
-                f.close()
+                if tgt.struct_dir != None:
+                    info("creating file '" + tgt_dir + "/" + app.PATH_FILENAME + "' for later reference...")
+                    f = open(tgt_dir + "/" + app.PATH_FILENAME,"w")
+                    f.write(os.path.abspath(tgt.struct_dir))
+                    f.close()
 
                 info("creating logs dir '" + tgt_dir + "/" + app.LOGS_DIR + "' ...")
                 if not os.path.isdir(tgt_dir + "/" + app.LOGS_DIR):
@@ -436,7 +441,7 @@ if __name__ == "__main__":
             error("no apps specified") 
 
         #setting up apps
-        targets = [app.App(path) for path in apps.vals if path != ""]
+        targets = [app.App(path) if os.path.isdir(path) else app.App(cmd=path.split()) for path in apps.vals]
 
         #setting sys states
         sys_states_keys = [key for key in sys_states_oargs]

@@ -41,12 +41,15 @@ class App:
                 f = open(struct_dir + "/" + NAME_FILENAME,"r")
                 self.name = f.read().replace("\n","")
                 f.close()
+        else:
+            if self.name == "":
+                self.name = os.path.basename(self.cmd[0])
 
         #checking if there is an optional script to run
         if os.path.isfile(struct_dir + "/" + OPT_CONFIG_FILENAME):
             sp.Popen([struct_dir + "/" + OPT_CONFIG_FILENAME]).wait() 
              
-        self.struct_dir = os.path.abspath(struct_dir)
+        self.struct_dir = None if struct_dir == "" else os.path.abspath(struct_dir)
         self.process    = None
         self.run_dir    = ""
         self.out        = ""
@@ -79,7 +82,7 @@ class Extractor(App):
             f = open(struct_dir + "/" + EXT_FILTER_FILE,"r")
             ext_ff_out = f.read().replace("\n","")
             f.close()
-            self.filter_key = STDOUT_LOG if ext_ff_out in ["1","true","TRUE","True"] else STDERR_LOG
+            self.filter_key = STDOUT_LOG if ext_ff_out.lower() in ["1","true"] else STDERR_LOG
         else:
             self.filter_key = STDOUT_LOG
 
