@@ -1,4 +1,4 @@
 #import benchmark
 #import extractor
-import app
 import state
+import cmd_line

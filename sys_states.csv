@@ -1,0 +1,2 @@
+name,getter,setter,type
+autonuma,./get_autonuma.sh,./set_autonuma.sh,str
