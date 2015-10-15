@@ -1,2 +1,3 @@
 name,getter,setter,type
 autonuma,./get_autonuma.sh,./set_autonuma.sh,str
+hehe,./get_hehe.sh,./set_hehe.sh,int

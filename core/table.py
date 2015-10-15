@@ -13,16 +13,39 @@ def getRawTable(filename, delim=","):
     return raw_table
 
 class Table:
-    def __init__(self, source, header=True):
+    def __init__(self, source, header=True, delim=","):
         if isinstance(source, str):
-            raw_table = transposeRawTable(getRawTable(source))
+            raw_table = transposeRawTable(getRawTable(source, delim))
         else:
             raw_table = transposeRawTable(source)
 
         if header:
-            self._data = dict((col[0], col[1:]) for col in raw_table)
+            self._data = [((i, col[0]), col[1:]) for i, col in enumerate(raw_table)]
         else:
             self._data = raw_table
 
+        self.header = header
+
     def __getitem__(self, specifier):
-        return self._data[specifier]
+        if self.header:
+            for keys, vals in self._data:
+                if specifier in keys:
+                    return vals
+        else:
+            return self._data[specifier]
+
+    def transposed(self, header=False):
+        if self.header:
+            source = [[name] + vals for name, vals in self]
+        else:
+            source = self._data
+        
+        return Table(source, header=header)
+
+    def __iter__(self):
+        if self.header:
+            for i in xrange(len(self._data)):
+                yield self._data[i][0][1], self._data[i][1]
+        else:
+            for val in self._data:
+                yield val

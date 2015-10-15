@@ -7,6 +7,9 @@ class CommandLine(object):
         self.command = command
         self.after = after
 
+    def __str__(self):
+        return " ".join(self.before + self.command + self.after)
+
     @property
     def before(self):
         return self._before
