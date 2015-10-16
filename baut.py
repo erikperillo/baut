@@ -1,3 +1,5 @@
+#!/usr/bin/python2.7
+
 import core.state as state
 import core.table as table
 import csv
@@ -55,8 +57,8 @@ def run():
     #command line arguments
     oarg.reset()
 
-    sys_states_path = oarg.Oarg(str, "-s --sys-states-path", "", "system states path")
-    states_path = oarg.Oarg(str,"-r --rounds", "", "rounds states list")
+    sys_vars_path = oarg.Oarg(str, "-s --sys-vars-path", "", "system vars .csv file path")
+    states_path = oarg.Oarg(str,"-r --rounds", "", "rounds states .csv file path")
     run_dir = oarg.Oarg(str, "-d --run-dir", os.getcwd(), "directory to store results")
     times_file = oarg.Oarg(str, "-t --times-file", "", "file to store times statistics")
     hlp = oarg.Oarg(bool, "-h --help", False, "this help message")
@@ -74,12 +76,12 @@ def run():
         oarg.describeArgs(def_val=True)
         exit()
 
-    for oa in sys_states_path, states_path:
+    for oa in sys_vars_path, states_path:
         if not oa.found:
             error("argument of keyword '-%s' must be passed" % oa.keywords[0])
 
     #loading system states table
-    sys_states = loadSystemStates(sys_states_path.val)    
+    sys_states = loadSystemStates(sys_vars_path.val)    
 
     #loading rounds states table
     states = table.Table(states_path.val).transposed()

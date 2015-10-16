@@ -1,3 +1,0 @@
-command,iterations,autonuma,hehe
-/usr/bin/time perf stat -a -x\\, /usr/bin/ls,4,1,lel
-/usr/bin/time perf stat -a -x\, /usr/bin/who,3,0,kek

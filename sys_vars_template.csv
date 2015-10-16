@@ -1,0 +1,2 @@
+name,getter,setter
+foo,util/get_foo.sh,util/set_foo.sh
