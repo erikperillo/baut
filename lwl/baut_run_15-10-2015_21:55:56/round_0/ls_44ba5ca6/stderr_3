@@ -1,0 +1,17 @@
+
+ Performance counter stats for 'ls':
+
+          1.036552      task-clock (msec)         #    0.639 CPUs utilized          
+                 1      context-switches          #    0.965 K/sec                  
+                 1      cpu-migrations            #    0.965 K/sec                  
+               100      page-faults               #    0.096 M/sec                  
+         2,193,010      cycles                    #    2.116 GHz                    
+         1,489,390      stalled-cycles-frontend   #   67.92% frontend cycles idle   
+           894,676      stalled-cycles-backend    #   40.80% backend  cycles idle   
+         1,367,149      instructions              #    0.62  insns per cycle        
+                                                  #    1.09  stalled cycles per insn
+           277,603      branches                  #  267.814 M/sec                  
+     <not counted>      branch-misses            
+
+       0.001622805 seconds time elapsed
+

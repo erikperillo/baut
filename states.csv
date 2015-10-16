@@ -1,0 +1,3 @@
+name,type,getter,setter,value
+autonuma,sys,./get_autonuma.sh,./set_autonuma.sh
+interleave,cl,,,

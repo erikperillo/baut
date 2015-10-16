@@ -1,0 +1,2 @@
+cmd,autonuma,hehe,before_cmd,after_cmd,iterations
+ls who,1,2,perf stat,,5

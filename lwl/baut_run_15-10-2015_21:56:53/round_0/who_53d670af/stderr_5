@@ -1,0 +1,17 @@
+
+ Performance counter stats for 'who':
+
+          0.773259      task-clock (msec)         #    0.671 CPUs utilized          
+                 2      context-switches          #    0.003 M/sec                  
+                 0      cpu-migrations            #    0.000 K/sec                  
+                66      page-faults               #    0.085 M/sec                  
+         1,629,207      cycles                    #    2.107 GHz                    
+         1,097,692      stalled-cycles-frontend   #   67.38% frontend cycles idle   
+           740,703      stalled-cycles-backend    #   45.46% backend  cycles idle   
+           992,228      instructions              #    0.61  insns per cycle        
+                                                  #    1.11  stalled cycles per insn
+           203,122      branches                  #  262.683 M/sec                  
+     <not counted>      branch-misses            
+
+       0.001152957 seconds time elapsed
+
