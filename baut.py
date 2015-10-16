@@ -2,14 +2,13 @@
 
 import core.state as state
 import core.table as table
-import csv
 import os
 import oarg
 import time
-import hashlib
 import subprocess as sp
 import shutil
 import shlex
+import numpy
 
 ACTIONS = ("run",)
 MAIN_OPTS = ("A", "action", "h", "help")
@@ -19,8 +18,21 @@ def error(msg, code=1):
     print info_key + "error: " + msg
     exit(code) 
 
-def info(msg):
-    print info_key + msg
+def info(msg, newline=True):
+    if newline:
+        print info_key + msg
+    else:
+        print info_key + msg,
+
+def getCmdTimes(command, file_path):
+    times = []
+
+    for row in table.getRawTable(file_path):
+        cmd, time = row[0], float(row[1])
+        if cmd == command:
+            times.append(time)
+
+    return times
 
 def loadSystemStates(file_path, delim=","):
     states_table = table.Table(file_path, delim=delim)    
@@ -32,7 +44,7 @@ def loadSystemStates(file_path, delim=","):
 def addCmdTimeToFile(file_path, cmd_name, time):
     #file must have the format: cmd,avg_wall_time
     with open(file_path, "a") as times_file:
-        times_file.write(",".join((cmd_name, str(time))) + os.linesep)
+        times_file.write(",".join((cmd_name.replace(",","\,"), str(time))) + os.linesep)
 
 def getRunDirName(fmt="baut_run_%d-%m-%Y_%H:%M:%S"):
     return time.strftime(fmt, time.gmtime())
@@ -42,9 +54,8 @@ def getCmdUniqueName(cmd_name, hash_size=8):
     return "%s_%s" % (os.path.basename(cmd_name), hash_obj.hexdigest()[0:hash_size])
 
 def formatTime(seconds):
-    seconds = int(seconds) 
-    hours = seconds / 3600
-    minutes = (seconds%3600) / 60
+    hours = int(seconds) / 3600
+    minutes = (int(seconds)%3600) / 60
     seconds = seconds % 60 
     return hours, minutes, seconds
 
@@ -58,7 +69,7 @@ def run():
     oarg.reset()
 
     sys_vars_path = oarg.Oarg(str, "-s --sys-vars-path", "", "system vars .csv file path")
-    states_path = oarg.Oarg(str,"-r --rounds", "", "rounds states .csv file path")
+    states_path = oarg.Oarg(str,"-S --states", "", "rounds states .csv file path")
     run_dir = oarg.Oarg(str, "-d --run-dir", os.getcwd(), "directory to store results")
     times_file = oarg.Oarg(str, "-t --times-file", "", "file to store times statistics")
     hlp = oarg.Oarg(bool, "-h --help", False, "this help message")
@@ -98,6 +109,34 @@ def run():
         if not name in special_names and not name in sys_states:
             error("unknown system state '%s' in file '%s'" % (name, states_path.val))
 
+    #estimating total time
+    if times_file.val:
+        total_time = 0.0
+        total_std = 0.0
+
+        for state in states[1:]:
+            cmd = state[states_descr.index("command")]
+            its = int(state[states_descr.index("iterations")])
+
+            _cmds_times = getCmdTimes(cmd, times_file.val)
+
+            if _cmds_times:
+                cmds_times = numpy.array(_cmds_times, dtype=float)
+                partial_time = cmds_times.mean() * its
+                partial_std = cmds_times.std() * its
+
+                info("estimated total time for command '%s': %dh%dm%fs (std: %fs)" % \
+                     ((cmd,) + formatTime(partial_time) + (partial_std,)))
+
+                total_time += partial_time
+                total_std += partial_std
+            else:
+                info("warning: could not estimate total time for command '%s" % cmd)
+        
+        if total_time > 0.0:
+            info("estimated total time: %dh%dm%fs (std: %fs)" % \
+                 (formatTime(total_time) + (total_std,)))
+
     #creating run directory
     run_dir = os.path.join(run_dir.val, getRunDirName())
     if not os.path.exists(run_dir):
@@ -107,6 +146,8 @@ def run():
 
     #main running loop
     for i, _state in enumerate(states[1:]):
+        print
+        info("in state %d" % (i+1))
         #creating state structure
         state_dir = os.path.join(run_dir, "state_%d" % i)
         if not os.path.exists(state_dir):
@@ -118,9 +159,11 @@ def run():
         state = dict((key, val) for key, val in zip(states_descr, _state))
 
         #setting system states
+        info("system vars configuration:")
         for name in [key for key, val in state.iteritems() if not key in special_names and val]:
-            info("setting %s = %s ..." % (name, state[name]))
+            info("\tsetting %s = %s ..." % (name, state[name]), newline=False)
             sys_states[name] = state[name]
+            print "done" 
 
         #creating state file
         with open(os.path.join(state_dir, "state.csv"), "w") as state_file:
@@ -131,11 +174,11 @@ def run():
         #creating command
         command = shlex.split(state["command"])
 
+        info("on command '%s':" % " ".join(command))
         #command loop
         for k in xrange(int(state["iterations"])):
-            info("running command '%s' (iteration %d out of %d) ..." \
-                 % (" ".join(command), k+1, int(state["iterations"])))
-
+            info("\trunning iteration %d out of %d ..." % (k+1, int(state["iterations"])),
+                  newline=False)
             #creating process
             process = sp.Popen(command, stdout=sp.PIPE, stderr=sp.PIPE)    
 
@@ -147,7 +190,9 @@ def run():
             if times_file.val:
                 wall_time = time.time() - start_time
                 addCmdTimeToFile(times_file.val, " ".join(command), wall_time)
-                info("\tdone (%f seconds elapsed)" % wall_time)
+                print "done (%f seconds elapsed)" % wall_time
+            else:
+                print "done"
 
             #writing results to files
             with open(os.path.join(state_dir, "stdout_%d" % (k+1)), "w") as out_file, \
