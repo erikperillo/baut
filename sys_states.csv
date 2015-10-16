@@ -1,5 +1,0 @@
-name,type,getter,setter
-autonuma,sys,./get_autonuma.sh,./set_autonuma.sh
-hehe,sys,./get_hehe.sh,./set_hehe.sh
-time,cl,,/usr/bin/time
-perf-stat,cl,,perf stat

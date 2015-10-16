@@ -1,8 +1,0 @@
-#name,getter,setter,typename,oarg_type,oarg_keys,oarg_defval,oarg_description
-numa_balancing,tools/rmv_newline.sh /proc/sys/kernel/numa_balancing,sudo tools/numa/numa_bal_config.py -a,str,bool,-n -numa-balancing,False,Activates automatic numa balancing
-numa_balancing_scan_size,tools/rmv_newline.sh /proc/sys/kernel/numa_balancing_scan_size_mb,sudo tools/numa/numa_bal_config.py -ss,str,int,-ss -scan-size,256,Automatic NUMA balancing scan size
-numa_balancing_scan_period_min,tools/rmv_newline.sh /proc/sys/kernel/numa_balancing_scan_period_min_ms,sudo tools/numa/numa_bal_config.py -spmin,str,int,-spmin -scan-period-min,1000,Automatic NUMA balancing scan period min
-numa_balancing_scan_delay,tools/rmv_newline.sh /proc/sys/kernel/numa_balancing_scan_delay_ms,sudo tools/numa/numa_bal_config.py -sd,str,int,-sd -scan-delay,1000,Automatic NUMA balancing scan delay
-numa_balancing_scan_period_max,tools/rmv_newline.sh /proc/sys/kernel/numa_balancing_scan_period_max_ms,sudo tools/numa/numa_bal_config.py -spmax,str,int,-spmax -scan-period-max,60000,Automatic NUMA balancing scan period max
-#numa_balancing_migrate_deferred,tools/rmv_newline.sh /proc/sys/kernel/numa_balancing_migrate_deferred,sudo tools/numa/numa_bal_config.py -md,str,int,-md -migrate-deferred,16,Automatic NUMA balancing migrate deferred
-#numa_balancing_settle_count,tools/rmv_newline.sh /proc/sys/kernel/numa_balancing_settle_count,sudo tools/numa/numa_bal_config.py -sc,str,int,-sc -settle-count,4,Automatic NUMA balancing settle count

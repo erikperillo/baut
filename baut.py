@@ -1,11 +1,13 @@
 import core.state as state
-import core.command_line as cl
 import core.table as table
 import csv
 import os
 import oarg
 import time
 import hashlib
+import subprocess as sp
+import shutil
+import shlex
 
 ACTIONS = ("run",)
 MAIN_OPTS = ("A", "action", "h", "help")
@@ -44,30 +46,17 @@ def formatTime(seconds):
     seconds = seconds % 60 
     return hours, minutes, seconds
 
-def getStateFileLines(header, values, commands):
-    header, values = list(header), list(values)
-
-    if not "cmd" in header:
-        header.append("cmd")
-        values.append("")
-
-    values[header.index("cmd")] = " ".join(commands)
-
-    return header, values
-
 def run():
     #routine's variables
     global info_key
     info_key = "[baut::run] "
-    special_names = ("cmd", "before_cmd", "after_cmd", "iterations")
+    special_names = ("command", "iterations")
 
     #command line arguments
     oarg.reset()
 
     sys_states_path = oarg.Oarg(str, "-s --sys-states-path", "", "system states path")
-    rounds_states_path = oarg.Oarg(str,"-r --rounds", "", "rounds states list")
-    cmds_list = oarg.Oarg(str,"-c --commands", "",
-                          "commands list (will override possible list in file)", single=False)
+    states_path = oarg.Oarg(str,"-r --rounds", "", "rounds states list")
     run_dir = oarg.Oarg(str, "-d --run-dir", os.getcwd(), "directory to store results")
     times_file = oarg.Oarg(str, "-t --times-file", "", "file to store times statistics")
     hlp = oarg.Oarg(bool, "-h --help", False, "this help message")
@@ -85,7 +74,7 @@ def run():
         oarg.describeArgs(def_val=True)
         exit()
 
-    for oa in sys_states_path, rounds_states_path:
+    for oa in sys_states_path, states_path:
         if not oa.found:
             error("argument of keyword '-%s' must be passed" % oa.keywords[0])
 
@@ -93,85 +82,76 @@ def run():
     sys_states = loadSystemStates(sys_states_path.val)    
 
     #loading rounds states table
-    rounds_states = table.Table(rounds_states_path.val).transposed()
-
-    #determining list of commands to run
-    if cmds_list.found:
-        commands = cmds_list.vals
-    else:
-        try:
-            commands = rounds_states["cmd"]
-        except KeyError:
-            error("invalid format for rounds file, must contain apps specifier")
-
+    states = table.Table(states_path.val).transposed()
     #names of state variables
-    rounds_states_names = rounds_states[0]
+    states_descr = states[0]
 
     #checking validity of names 
     for special_name in special_names:
-        if not special_name in rounds_states_names:
-            error("no variable '%s' defined in file '%s'" % (special_name, rounds_states_path.val))
+        if not special_name in states_descr:
+            error("mandatory variable '%s' not defined in file '%s'" % (special_name, 
+                                                                        states_path.val))
 
-    for name in rounds_states_names:
+    for name in states_descr:
         if not name in special_names and not name in sys_states:
-            error("unknown system state '%s' in file '%s'" % (name, rounds_states_path.val))
+            error("unknown system state '%s' in file '%s'" % (name, states_path.val))
 
     #creating run directory
     run_dir = os.path.join(run_dir.val, getRunDirName())
+    if not os.path.exists(run_dir):
+        os.makedirs(run_dir)
+    #copying states file
+    shutil.copy2(states_path.val, os.path.join(run_dir, "states.csv"))
 
     #main running loop
-    for i, round_state in enumerate(rounds_states[1:]):
-        info("creating round structure")
-        round_dir = os.path.join(run_dir, "round_%d" % i)
-        try:
-            os.makedirs(round_dir)
-        except OSError:
-            info("warning: directory '%s' already existed" % round_dir)
+    for i, _state in enumerate(states[1:]):
+        #creating state structure
+        state_dir = os.path.join(run_dir, "state_%d" % i)
+        if not os.path.exists(state_dir):
+            os.makedirs(state_dir)
+        else:
+            info("warning: directory '%s' already exists" % state_dir)
+
+        #creating state dict
+        state = dict((key, val) for key, val in zip(states_descr, _state))
+
+        #setting system states
+        for name in [key for key, val in state.iteritems() if not key in special_names and val]:
+            info("setting %s = %s ..." % (name, state[name]))
+            sys_states[name] = state[name]
+
         #creating state file
-        header, values = getStateFileLines(rounds_states_names, round_state, commands)
-        with open(os.path.join(round_dir, "state.csv"), "w") as state_file:
-            state_file.write(",".join(header) + os.linesep)
-            state_file.write(",".join(values) + os.linesep)
+        with open(os.path.join(state_dir, "state.csv"), "w") as state_file:
+            state_file.write(",".join(states_descr) + os.linesep)
+            state_file.write(",".join(state[key] if key in special_names else sys_states[key] \
+                                      for key in states_descr) + os.linesep)
 
-        info("starting new round\n")
-        states = dict((key, val) for key, val in zip(rounds_states_names, round_state))
+        #creating command
+        command = shlex.split(state["command"])
 
-        for state_name in [key for key, val in states.iteritems() \
-                           if not key in special_names and val]:
-            info("setting %s = %s ..." % (state_name, states[state_name]))
-            sys_states[state_name] = states[state_name]
+        #command loop
+        for k in xrange(int(state["iterations"])):
+            info("running command '%s' (iteration %d out of %d) ..." \
+                 % (" ".join(command), k+1, int(state["iterations"])))
 
-        for k in xrange(int(states["iterations"])):
-            info("on iteration %d out of %d" % (k + 1, int(states["iterations"])))
-            print "H",commands 
-            for cmd in commands:
-                #creating cmd dir
-                cmd_dir = os.path.join(round_dir, getCmdUniqueName(cmd))
-                try:
-                    os.makedirs(cmd_dir)
-                except OSError:
-                    pass
+            #creating process
+            process = sp.Popen(command, stdout=sp.PIPE, stderr=sp.PIPE)    
 
-                #building command line
-                cmd_line = cl.CommandLine(cmd, states["before_cmd"], states["after_cmd"])
+            if times_file.val:
+                start_time = time.time()          
+            #running command
+            stdout, stderr = process.communicate()
+            #appending time to times file if specified
+            if times_file.val:
+                wall_time = time.time() - start_time
+                addCmdTimeToFile(times_file.val, " ".join(command), wall_time)
+                info("\tdone (%f seconds elapsed)" % wall_time)
 
-                info("\trunning command %s ..." % cmd_line)
-                if times_file.val:
-                    start_time = time.time()          
-                #running command 
-                stdout, stderr = cmd_line.run()
-                #adding time to file if specified 
-                if times_file.val:
-                    wall_time = time.time() - start_time
-                    addCmdTimeToFile(times_file.val, cmd, wall_time)
-                    msg = "\tdone | %f seconds elapsed" % wall_time
-                    info(msg)
-
-                #writing results to files
-                with open(os.path.join(cmd_dir, "stdout_%d" % (k+1)), "w") as out_file, \
-                     open(os.path.join(cmd_dir, "stderr_%d" % (k+1)), "w") as err_file:
-                    out_file.write(stdout)
-                    err_file.write(stderr) 
+            #writing results to files
+            with open(os.path.join(state_dir, "stdout_%d" % (k+1)), "w") as out_file, \
+                 open(os.path.join(state_dir, "stderr_%d" % (k+1)), "w") as err_file:
+                out_file.write(stdout)
+                err_file.write(stderr) 
                      
 
 def main():

@@ -1,4 +1,4 @@
-import csv
+import re
 
 def transposeRawTable(raw_table):
     """input: list of lists of strings"""
@@ -7,8 +7,7 @@ def transposeRawTable(raw_table):
 def getRawTable(filename, delim=","):
     """input: string"""
     with open (filename, "r") as f:
-        reader = csv.reader(f, delimiter=delim)
-        raw_table = [col for col in reader]
+        raw_table = [re.split(r"(?<!\\)" + delim, line.rstrip()) for line in f]
 
     return raw_table
 
@@ -49,3 +48,6 @@ class Table:
         else:
             for val in self._data:
                 yield val
+
+if __name__ == "__main__":
+    getRawTable("../states.csv")
