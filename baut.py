@@ -3,7 +3,8 @@
 import core.state as state
 import core.table as table
 import os
-import oarg_exp as oarg
+import sys
+import oarg
 import time
 import subprocess as sp
 import shutil
@@ -23,6 +24,8 @@ def info(msg, newline=True):
         print info_key + msg
     else:
         print info_key + msg,
+
+    sys.stdout.flush()
 
 def getCmdTimes(command, file_path):
     times = []
@@ -61,7 +64,7 @@ def loadSystemStates(file_path, delim=","):
     return system_states
 
 def addCmdTimeToFile(file_path, cmd_name, time):
-    #file must have the format: cmd,avg_wall_time
+    #file must have the format: cmd,wall_time
     with open(file_path, "a") as times_file:
         times_file.write(",".join((cmd_name.replace(",","\,"), str(time))) + os.linesep)
 
@@ -141,8 +144,8 @@ def run():
                 print "estimated total time: %dh%dm%fs (+- %fs)" % \
                       (formatTime(sum(mean for mean, __ in valid_times_list)) + 
                        (sum(std for __, std in valid_times_list),))
-        except OSError:
-            info("warning: times file '%s' could not be open")
+        except IOError:
+            info("warning: times file '%s' could not be open" % times_file.val)
 
     for name in states_descr:
         if not name in special_names and not name in sys_states:
@@ -155,6 +158,7 @@ def run():
     #copying states file
     shutil.copy2(states_path.val, os.path.join(run_dir, "states.csv"))
 
+    total_time = 0.
     #main running loop
     for i, _state in enumerate(states[1:]):
         print
@@ -186,6 +190,8 @@ def run():
         command = shlex.split(state["command"])
 
         info("on command '%s':" % " ".join(command))
+        
+        wall_times = []
         #command loop
         for k in xrange(int(state["iterations"])):
             info("\trunning iteration %d out of %d ..." % (k+1, int(state["iterations"])),
@@ -193,24 +199,30 @@ def run():
             #creating process
             process = sp.Popen(command, stdout=sp.PIPE, stderr=sp.PIPE)    
 
-            if times_file.val:
-                start_time = time.time()          
+            #time statistics
+            start_time = time.time()          
             #running command
             stdout, stderr = process.communicate()
+            #getting elapsed time
+            wall_times.append(time.time() - start_time)
+            print "done (%f seconds elapsed)" % wall_times[-1]
+
             #appending time to times file if specified
             if times_file.val:
-                wall_time = time.time() - start_time
-                addCmdTimeToFile(times_file.val, " ".join(command), wall_time)
-                print "done (%f seconds elapsed)" % wall_time
-            else:
-                print "done"
+                addCmdTimeToFile(times_file.val, " ".join(command), wall_times[-1])
 
             #writing results to files
             with open(os.path.join(state_dir, "stdout_%d" % (k+1)), "w") as out_file, \
                  open(os.path.join(state_dir, "stderr_%d" % (k+1)), "w") as err_file:
                 out_file.write(stdout)
                 err_file.write(stderr) 
+
+        total_time += sum(wall_times)
+        info("end of iterations for command. average elapsed time: %fs" % \
+             (sum(wall_times) / len(wall_times)))
                      
+    print
+    info("end. total elapsed time: %dh%dm%fs" % formatTime(total_time))
 
 def main():
     #command line args
