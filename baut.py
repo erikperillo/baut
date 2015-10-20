@@ -4,7 +4,7 @@ import core.state as state
 import core.table as table
 import os
 import sys
-import oarg
+import oarg_exp as oarg
 import time
 import subprocess as sp
 import shutil
@@ -90,8 +90,8 @@ def run():
     #command line arguments
     oarg.reset()
 
-    sys_vars_path = oarg.Oarg("-s --sys-vars-path", "", "system vars .csv file path")
-    states_path = oarg.Oarg("-S --states", "", "rounds states .csv file path")
+    vars_path = oarg.Oarg("-v --vars", "", "system vars .csv file path")
+    states_path = oarg.Oarg("-s --states", "", "rounds states .csv file path")
     run_dir = oarg.Oarg("-d --run-dir", os.getcwd(), "directory to store results")
     times_file = oarg.Oarg("-t --times-file", os.path.abspath("times.csv"), 
                            "file to store times statistics")
@@ -110,12 +110,12 @@ def run():
         oarg.describeArgs(def_val=True)
         exit()
 
-    for oa in sys_vars_path, states_path:
+    for oa in vars_path, states_path:
         if not oa.found:
             error("argument of keyword '-%s' must be passed" % oa.keywords[0])
 
     #loading system states table
-    sys_states = loadSystemStates(sys_vars_path.val)    
+    variables = loadSystemStates(vars_path.val)    
 
     #loading rounds states table
     states = table.Table(states_path.val).transposed()
@@ -148,7 +148,7 @@ def run():
             info("warning: times file '%s' could not be open" % times_file.val)
 
     for name in states_descr:
-        if not name in special_names and not name in sys_states:
+        if not name in special_names and not name in variables:
             error("unknown system state '%s' in file '%s'" % (name, states_path.val))
 
     #creating run directory
@@ -177,13 +177,13 @@ def run():
         info("system vars configuration:")
         for name in [key for key, val in state.iteritems() if not key in special_names and val]:
             info("\tsetting %s = %s ..." % (name, state[name]), newline=False)
-            sys_states[name] = state[name]
+            variables[name] = state[name]
             print "done" 
 
         #creating state file
         with open(os.path.join(state_dir, "state.csv"), "w") as state_file:
             state_file.write(",".join(states_descr) + os.linesep)
-            state_file.write(",".join(state[key] if key in special_names else sys_states[key] \
+            state_file.write(",".join(state[key] if key in special_names else variables[key] \
                                       for key in states_descr) + os.linesep)
 
         #creating command
