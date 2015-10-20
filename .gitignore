@@ -1,4 +1,5 @@
 tests/
+baut_*/
 *.pyc
 *.swp
 *.csv

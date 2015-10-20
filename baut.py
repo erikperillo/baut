@@ -3,7 +3,7 @@
 import core.state as state
 import core.table as table
 import os
-import oarg
+import oarg_exp as oarg
 import time
 import subprocess as sp
 import shutil
@@ -34,6 +34,25 @@ def getCmdTimes(command, file_path):
 
     return times
 
+def getCmdTimesList(states, states_descr, file_path):
+    times = {}
+
+    for state in states[1:]:
+        cmd = state[states_descr.index("command")]
+        its = int(state[states_descr.index("iterations")])
+
+        _cmds_times = getCmdTimes(cmd, file_path)
+
+        if _cmds_times:
+            cmds_times = numpy.array(_cmds_times, dtype=float)
+            time_mean = cmds_times.mean() * its
+            time_std = cmds_times.std() * its
+            times[cmd] = (time_mean, time_std)
+        else:
+            times[cmd] = None
+
+    return times
+    
 def loadSystemStates(file_path, delim=","):
     states_table = table.Table(file_path, delim=delim)    
     values = [states_table[col] for col in ("name", "getter", "setter")]
@@ -68,11 +87,12 @@ def run():
     #command line arguments
     oarg.reset()
 
-    sys_vars_path = oarg.Oarg(str, "-s --sys-vars-path", "", "system vars .csv file path")
-    states_path = oarg.Oarg(str,"-S --states", "", "rounds states .csv file path")
-    run_dir = oarg.Oarg(str, "-d --run-dir", os.getcwd(), "directory to store results")
-    times_file = oarg.Oarg(str, "-t --times-file", "", "file to store times statistics")
-    hlp = oarg.Oarg(bool, "-h --help", False, "this help message")
+    sys_vars_path = oarg.Oarg("-s --sys-vars-path", "", "system vars .csv file path")
+    states_path = oarg.Oarg("-S --states", "", "rounds states .csv file path")
+    run_dir = oarg.Oarg("-d --run-dir", os.getcwd(), "directory to store results")
+    times_file = oarg.Oarg("-t --times-file", os.path.abspath("times.csv"), 
+                           "file to store times statistics")
+    hlp = oarg.Oarg("-h --help", False, "this help message")
     
     #ckecking for wrong command line options
     try:
@@ -105,37 +125,28 @@ def run():
             error("mandatory variable '%s' not defined in file '%s'" % (special_name, 
                                                                         states_path.val))
 
+    if times_file.val:
+        try:
+            times_list = getCmdTimesList(states, states_descr, times_file.val)
+            for cmd, elapsed_time in times_list.iteritems():
+                if elapsed_time:
+                    time_mean, time_std = elapsed_time 
+                    info("time estimation for command '%s': %dh%dm%fs (+- %fs)" % \
+                         ((cmd,) + formatTime(time_mean) + (time_std,)))
+                else:
+                    info("warning: could not get time estimation for command '%s'" % cmd)
+
+            valid_times_list = [val for __, val in times_list.iteritems() if val]
+            if valid_times_list:
+                print "estimated total time: %dh%dm%fs (+- %fs)" % \
+                      (formatTime(sum(mean for mean, __ in valid_times_list)) + 
+                       (sum(std for __, std in valid_times_list),))
+        except OSError:
+            info("warning: times file '%s' could not be open")
+
     for name in states_descr:
         if not name in special_names and not name in sys_states:
             error("unknown system state '%s' in file '%s'" % (name, states_path.val))
-
-    #estimating total time
-    if times_file.val:
-        total_time = 0.0
-        total_std = 0.0
-
-        for state in states[1:]:
-            cmd = state[states_descr.index("command")]
-            its = int(state[states_descr.index("iterations")])
-
-            _cmds_times = getCmdTimes(cmd, times_file.val)
-
-            if _cmds_times:
-                cmds_times = numpy.array(_cmds_times, dtype=float)
-                partial_time = cmds_times.mean() * its
-                partial_std = cmds_times.std() * its
-
-                info("estimated total time for command '%s': %dh%dm%fs (std: %fs)" % \
-                     ((cmd,) + formatTime(partial_time) + (partial_std,)))
-
-                total_time += partial_time
-                total_std += partial_std
-            else:
-                info("warning: could not estimate total time for command '%s" % cmd)
-        
-        if total_time > 0.0:
-            info("estimated total time: %dh%dm%fs (std: %fs)" % \
-                 (formatTime(total_time) + (total_std,)))
 
     #creating run directory
     run_dir = os.path.join(run_dir.val, getRunDirName())
@@ -203,8 +214,8 @@ def run():
 
 def main():
     #command line args
-    action = oarg.Oarg(str, "-A --action", "", "action to take", 0)
-    hlp = oarg.Oarg(bool, "-h --help", False, "this help message")
+    action = oarg.Oarg("-A --action", "", "action to take", 0)
+    hlp = oarg.Oarg("-h --help", False, "this help message")
 
     #checking for wrongs options passed, it may be intended for other parts besides main
     unknown_key = ""
