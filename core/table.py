@@ -4,11 +4,11 @@ def transposeRawTable(raw_table):
     """input: list of lists of strings"""
     return [[line[i] for line in raw_table] for i in range(len(raw_table[0]))]
 
-def getRawTable(filename, delim=","):
+def getRawTable(filename, delim=",", comment_pattern="#"):
     """input: string"""
     with open (filename, "r") as f:
-        raw_table = [re.split(r"(?<!\\)" + delim, line.rstrip()) for line in f]
-
+        raw_table = [re.split(r"(?<!\\)" + delim, line.rstrip()) for line in f \
+					 if not line.startswith(comment_pattern)]
     return raw_table
 
 class Table:

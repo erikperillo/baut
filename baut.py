@@ -4,7 +4,10 @@ import core.state as state
 import core.table as table
 import os
 import sys
-import oarg_exp as oarg
+try:
+    import oarg_exp as oarg
+except ImportError:
+    import oarg
 import time
 import subprocess as sp
 import shutil
@@ -14,6 +17,7 @@ import numpy
 ACTIONS = ("run",)
 MAIN_OPTS = ("A", "action", "h", "help")
 info_key = "[baut] "
+file_dir = os.path.dirname(os.path.abspath(__file__))
 
 def error(msg, code=1):
     print info_key + "error: " + msg
@@ -83,17 +87,18 @@ def formatTime(seconds):
 
 def run():
     #routine's variables
-    global info_key
+    global info_key, file_dir
     info_key = "[baut::run] "
     special_names = ("command", "iterations")
 
     #command line arguments
     oarg.reset()
 
-    vars_path = oarg.Oarg("-v --vars", "", "system vars .csv file path")
+    vars_path = oarg.Oarg("-v --vars", os.path.join(file_dir, "vars"), "vars .csv file path")
     states_path = oarg.Oarg("-s --states", "", "rounds states .csv file path")
-    run_dir = oarg.Oarg("-d --run-dir", os.getcwd(), "directory to store results")
-    times_file = oarg.Oarg("-t --times-file", os.path.abspath("times.csv"), 
+    run_dir = oarg.Oarg("-d --run-dir", os.path.join(file_dir, "runs"), 
+                        "directory to store results")
+    times_file = oarg.Oarg("-t --times-file", os.path.join(file_dir, "times.csv"), 
                            "file to store times statistics")
     hlp = oarg.Oarg("-h --help", False, "this help message")
     
@@ -174,7 +179,7 @@ def run():
         state = dict((key, val) for key, val in zip(states_descr, _state))
 
         #setting system states
-        info("system vars configuration:")
+        info("vars configuration:")
         for name in [key for key, val in state.iteritems() if not key in special_names and val]:
             info("\tsetting %s = %s ..." % (name, state[name]), newline=False)
             variables[name] = state[name]
