@@ -278,7 +278,7 @@ def extract():
     oarg.reset()
 
     run_dir = oarg.Oarg("-d --run-dir", "", "directory of application run")
-    baut_run_struct = oarg.Oarg("-D --baut-struct", False, "indicates it is a baut run directory")
+    baut_run_struct = oarg.Oarg("-D --baut-struct", False, "indicates a baut run directory")
     vars_path = oarg.Oarg("-v --vars", os.path.join(file_dir, "vars", "vars.csv"), 
                           "vars .csv file path")
     vars_names = oarg.Oarg("-n --vars-names", "", "names of vars to filter", single=False)
@@ -351,6 +351,15 @@ def extract():
                     res_file.write(output)
 
         info("results stored in '%s'" % os.path.abspath(results_dir))
+        
+        try:
+            os.chdir(results_dir)
+            glue = sp.Popen([os.path.join(file_dir, "util", "glue.sh")] + [k for k in variables],
+                            stdout=sp.PIPE, stderr=sp.PIPE) 
+            with open("glued_vars.csv", "w") as resume_file:
+                resume_file.write(glue.communicate()[0])
+        except:
+            info("warning: could not use glue.sh utility")
 
     info("done.")
 
