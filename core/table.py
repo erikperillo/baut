@@ -33,6 +33,9 @@ class Table:
         else:
             return self._data[specifier]
 
+    def __len__(self):
+        return len(self._data)
+
     def transposed(self, header=False):
         if self.header:
             source = [[name] + vals for name, vals in self]

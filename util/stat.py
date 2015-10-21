@@ -34,15 +34,17 @@ def main():
         import oarg
     import sys
     import os
-    sys.path.append(os.path.join("..", "core"))
-    import table as tb
+    file_dir = os.path.dirname(os.path.realpath(__file__))
+    sys.path.append(os.path.join(file_dir, ".."))
+    import core.table as tb
 
     input_filename = oarg.Oarg("-i --input", "", "input file", 0)
     delimiter = oarg.Oarg("-d --delimiter", ",", "delimiter of each colummn in file")
-    col_numbers = oarg.Oarg("-n --numbers", 0, "numbers of columns")
+    col_numbers = oarg.Oarg("-n --numbers", 0, "numbers of columns", single=False)
     col_names = oarg.Oarg("-N --names", "", "names of column to be analysed", single=False)
+    all_cols = oarg.Oarg("-a --all-cols", False, "operates throught all collumns")
     measures = oarg.Oarg("-m --measures", "mean", "statistical measure(s) to make", single=False)
-    header = oarg.Oarg("-H --header", False, "consider header in file")
+    has_header = oarg.Oarg("-H --header", False, "consider header in file")
     hlp = oarg.Oarg("-h --help", False, "this help message")
 
     oarg.parse(delim=":")
@@ -54,17 +56,26 @@ def main():
     if not input_filename.found:
         error("no input file specified (use '-h' for help)") 
 
-    #defining specifier
-    specifiers = col_numbers.vals if not col_names.found else col_names.vals
-
-    if col_names.found:
-        header.val = True
-        print ",".join("%s_%s" % (str(n), m) for n in col_names.vals for m in measures.vals)
-    else:
-        print ",".join("col_%d_%s" % (n, m) for n in col_numbers.vals for m in measures.vals)
+    #defining if there is header or not
+    header = True if col_names.found else has_header.val
 
     #creating table
-    table = tb.Table(input_filename.val, header=header.val)
+    table = tb.Table(input_filename.val, header=header)
+
+    #defining specifier
+    if all_cols.val:
+        specifiers = range(len(table))
+    else:
+        specifiers = col_names.vals if col_names.found else col_numbers.vals
+
+    if header:
+        if col_names.found:
+            names = col_names.vals
+        else:
+            names = [name for name, __ in table][0:len(table) if all_cols.val else 1]
+        print ",".join("%s_%s" % (str(n), m) for n in names for m in measures.vals)
+    else:
+        print ",".join("col_%d_%s" % (n, m) for n in col_numbers.vals for m in measures.vals)
 
     results = []
     for specifier in specifiers:

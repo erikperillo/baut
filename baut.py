@@ -351,15 +351,6 @@ def extract():
                     res_file.write(output)
 
         info("results stored in '%s'" % os.path.abspath(results_dir))
-        
-        try:
-            os.chdir(results_dir)
-            glue = sp.Popen([os.path.join(file_dir, "util", "glue.sh")] + [k for k in variables],
-                            stdout=sp.PIPE, stderr=sp.PIPE) 
-            with open("glued_vars.csv", "w") as resume_file:
-                resume_file.write(glue.communicate()[0])
-        except:
-            info("warning: could not use glue.sh utility")
 
     info("done.")
 
