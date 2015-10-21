@@ -7,8 +7,8 @@ def transposeRawTable(raw_table):
 def getRawTable(filename, delim=",", comment_pattern="#"):
     """input: string"""
     with open (filename, "r") as f:
-        raw_table = [re.split(r"(?<!\\)" + delim, line.rstrip()) for line in f \
-					 if not line.startswith(comment_pattern)]
+        raw_table = [re.split(r"(?<!\\)" + delim, line.rstrip())
+                     for line in f if line and not line.startswith(comment_pattern)]
     return raw_table
 
 class Table:

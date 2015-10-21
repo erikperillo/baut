@@ -1,4 +1,5 @@
 import subprocess as sp
+import shlex
 
 class SystemState(object):
     """this class represents some system state. 
@@ -7,8 +8,16 @@ class SystemState(object):
        getter: str / list of strings
        setter: str / list of strings"""
     def __init__(self, getter, setter):
-        self.getter = getter.split() if isinstance(getter, str) else getter
-        self.setter = setter.split() if isinstance(setter, str) else setter
+        self.getter = shlex.split(getter) if isinstance(getter, str) else getter
+        self.setter = shlex.split(setter) if isinstance(setter, str) else setter
+
+    def __getitem__(self, key):
+        """calls getter when arguments are provided.  it is returned as a string by default.
+           key must be a string"""
+        args = shlex.split(key)
+        proc = sp.Popen(self.getter + args, stdout=sp.PIPE, stderr=sp.PIPE)
+        return proc.communicate()[0]
+
 
     @property
     def val(self):
@@ -21,5 +30,5 @@ class SystemState(object):
     def val(self, value):
         """the setter must be something (eg. shell script) that takes value as first argument.
            value: * (will be converted to string)"""
-        proc = sp.Popen(self.setter + [value], stdout=sp.PIPE, stderr=sp.PIPE)
+        proc = sp.Popen(self.setter + [str(value)], stdout=sp.PIPE, stderr=sp.PIPE)
         proc.wait()

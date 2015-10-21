@@ -3,8 +3,8 @@
 #gets time from file.
 #supposes it is in form 'elapsed_s,user_s,sys_s\n%e,%U,%S'
 
-file=$1
-event=$2
+file=$2
+event=$1
 
 ([[ -z $file ]] || [[ -z $event ]]) && { echo "error: must pass file and event"; exit 1; }
 

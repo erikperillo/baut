@@ -1,3 +1,19 @@
 this is where you can store your vars description files.
+every vars file must be in format csv, delimited by commas, in the following format:
 
-every vars file must be in format csv, delimited by commas
+what is a var? a var is a system variable. benchmarking something can be thought of as simply
+measuring variables on the system that were altered by your application, e.g. a performance 
+counter. if you want, for instance, to get the value of the file ~/foo after you program is run,
+you can get it by making a command (e.g. cat ~/foo) and putting it in the setter field. it is 
+analogous for setters. 
+
+name,getter,setter,file_pattern
+
+name is the name of the variable. it must be unique.
+getter is a command by which you will set your variable. output MUST be done via stdout.
+setter is a command by which you will modify your variable. the first argument of the command 
+must be the value that you want to set.
+file_pattern is a useful field in the case your program produces files that are to be parsed.
+if they match the pattern and are stored in the directory of the run, a file with the name "name"
+will be created, where every line is the result of the command "setter" applied to every matched
+file name.
