@@ -1,5 +1,4 @@
-tests/
-baut_*/
+runs/*
 *.pyc
 *.swp
 *.csv
