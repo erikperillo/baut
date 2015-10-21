@@ -1,3 +1,0 @@
-command run: ./baut.py extract states/states.csv -v vars/vars.csv -n time_elapsed time_user -r runs/baut_run_21-10-2015_10:24:34/
-execution happened on: Wednesday, 21 October 2015 10:05:19
-project commit hash: aea1e555ad56a212e42d3ff620903d8e3075eb52
