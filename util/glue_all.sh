@@ -17,5 +17,5 @@ for d in $dir/state_*; do
 		header_got=true
 	fi
 
-	#paste -d, $suite_with_header $d/results/glued_stats.csv 
+	paste -d, $suite_with_header $d/results/glued_stats.csv | tail -n 1
 done
