@@ -546,3 +546,4 @@ ls,0.000866174697876
 /usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00148797035217
 /usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.0014500617981
 /usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00179719924927
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time perf stat -e r510123\,r510223\,cycles\,instructions\,stalled-cycles-backend -a -c -o perf-stat-out -x\, -- numactl --interleave=all -- /local/erik/NPB2.3-omp-C/bin/ft.C,61.3301558495

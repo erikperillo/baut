@@ -1,4 +1,5 @@
 runs/*
 *.pyc
 *.swp
+times.csv
 !*_template.csv

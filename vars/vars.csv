@@ -1,0 +1,11 @@
+name,getter,setter,file_pattern
+autonuma,util/get_autonuma.sh,util/set_autonuma.sh,,
+time_elapsed,util/get_time.sh elapsed,,time*
+time_user,util/get_time.sh user,,time*
+time_sys,util/get_time.sh sys,,time*
+instructions,util/get_from_perf-stat.sh instructions,,perf-stat*
+cycles,util/get_from_perf-stat.sh cycles,,perf-stat*
+stalled-cycles-backend,util/get_from_perf-stat.sh stalled-cycles-backend,,perf-stat*
+lsq_load,util/get_from_perf-stat.sh lsq_load,,perf-stat*
+lsq_store,util/get_from_perf-stat.sh lsq_store,,perf-stat*
+suite,util/det_suite.sh,,state.csv
