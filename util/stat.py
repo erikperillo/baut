@@ -61,7 +61,6 @@ def main():
 
     #creating table
     filename = os.path.abspath(input_filename.val)
-    print input_filename.val
     table = tb.Table(filename, header=header)
 
     #defining specifier
