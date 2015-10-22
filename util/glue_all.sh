@@ -9,8 +9,9 @@ for d in $dir/state_*; do
 
 	#creating col with suite
 	suite_with_header=$(mktemp)
-	echo "suite" > $suite_with_header
-	cat $d/results/suite >> $suite_with_header
+	echo "suite,name" > $suite_with_header
+	suite_and_name=$(cat $d/results/suite),$(cat $d/results/name)
+	echo $suite_and_name >> $suite_with_header
 
 	if ! $header_got; then
 		paste -d, $suite_with_header $d/results/glued_stats.csv | head -n 1

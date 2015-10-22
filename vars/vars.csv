@@ -9,3 +9,4 @@ stalled-cycles-backend,util/get_from_perf-stat.sh stalled-cycles-backend,,perf-s
 lsq_load,util/get_from_perf-stat.sh lsq_load,,perf-stat*
 lsq_store,util/get_from_perf-stat.sh lsq_store,,perf-stat*
 suite,util/det_suite.sh,,state.csv
+name,util/get_app-name.sh,,state.csv
