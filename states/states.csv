@@ -1,0 +1,5 @@
+command,iterations
+#ls,8
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time ls,8
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time who,8
+#/usr/bin/time -f 'elapsed_s\,user_s\,sys_s\n%e\,%U\,%S' -o time sleep 2,8

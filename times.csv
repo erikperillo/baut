@@ -1,0 +1,548 @@
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00668478012085
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.0065770149231
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00688290596008
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00661897659302
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.0069260597229
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00662207603455
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00691509246826
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00699090957642
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00691199302673
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00655102729797
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00672078132629
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00703096389771
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00660109519958
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00724792480469
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00660490989685
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00672197341919
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00671577453613
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00694799423218
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00664687156677
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00659108161926
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00666213035583
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00690007209778
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00672507286072
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.0061149597168
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00655603408813
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00658416748047
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00653696060181
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00657200813293
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00645303726196
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00694108009338
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00682210922241
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00674295425415
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00662899017334
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.0065438747406
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00662803649902
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00684881210327
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00645804405212
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00661110877991
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00662398338318
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00658893585205
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00698208808899
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.0068371295929
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00687694549561
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00629281997681
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00659203529358
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00698208808899
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.006915807724
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00616693496704
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00658488273621
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00671792030334
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00672793388367
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00684714317322
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.0068678855896
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00679707527161
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00659203529358
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.0067310333252
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00672602653503
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.0074360370636
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00700211524963
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00669503211975
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00681900978088
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00658202171326
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00638389587402
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00673294067383
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00693321228027
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00661706924438
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00697016716003
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00663495063782
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00708913803101
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00672793388367
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00670599937439
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00648283958435
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.100938081741
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00655794143677
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00676488876343
+/usr/bin/time perf stat -a -x\\, /usr/bin/ls,0.00702905654907
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00671100616455
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00695991516113
+/usr/bin/time perf stat -a -x\, /usr/bin/who,0.00696182250977
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.0070219039917
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00607395172119
+/usr/bin/time perf stat -a -x\, /usr/bin/cp,0.00730085372925
+ls,0.00109791755676
+ls,0.00107502937317
+ls,0.00105690956116
+ls,0.00110507011414
+ls,0.00114488601685
+ls,0.00112104415894
+ls,0.00116395950317
+ls,0.000916004180908
+ls,0.000795841217041
+ls,0.000741958618164
+ls,0.000731945037842
+ls,0.000789880752563
+ls,0.000799179077148
+ls,0.000492811203003
+ls,0.000112771987915
+ls,0.000769138336182
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000428199768066
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000604152679443
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000669002532959
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.00198101997375
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000704050064087
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000613212585449
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.00130009651184
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000730991363525
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00155591965
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00236797333
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.02085208893
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00165581703
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00161480904
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00157403946
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00157308578
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00170302391
+ls,0.000792026519775
+ls,0.000718832015991
+ls,0.000785827636719
+ls,0.000776052474976
+ls,0.000765085220337
+ls,0.000933885574341
+ls,0.000775098800659
+ls,0.000730991363525
+ls,0.000834941864014
+ls,0.000808954238892
+ls,0.000986814498901
+ls,0.00111413002014
+ls,0.000761985778809
+ls,0.000818014144897
+ls,0.000564098358154
+ls,0.00112700462341
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000435829162598
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.00194883346558
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000682830810547
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000612020492554
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000641107559204
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000671863555908
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000622987747192
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000654935836792
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time sleep 2,2.00143289566
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time sleep 2,2.00159192085
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time sleep 2,2.00159192085
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time sleep 2,2.00153589249
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time sleep 2,2.00180697441
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time sleep 2,2.00163698196
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time sleep 2,2.00163006783
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time sleep 2,2.00170207024
+ls,0.000785112380981
+ls,0.000744104385376
+ls,0.000765085220337
+ls,0.000754833221436
+ls,9.79900360107e-05
+ls,0.000813007354736
+ls,0.000771999359131
+ls,0.000838994979858
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.0019998550415
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.00296306610107
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.00112414360046
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.00066089630127
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000954866409302
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000771999359131
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000595092773438
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000648975372314
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00142002106
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.0015847683
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00168395042
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00156092644
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00185108185
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.0013229847
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00155210495
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.0019299984
+ls,0.00090479850769
+ls,0.00078821182251
+ls,0.00103902816772
+ls,0.000777006149292
+ls,0.000756025314331
+ls,0.000744104385376
+ls,0.000734090805054
+ls,0.000761985778809
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000629901885986
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.00209212303162
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000666856765747
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.00117087364197
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.00137281417847
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000859975814819
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.00104308128357
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000552177429199
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00131201744
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00243091583
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.02416205406
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00149893761
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.0041217804
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00144314766
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00155997276
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.001516819
+ls,0.000894069671631
+ls,0.00114107131958
+ls,0.000980138778687
+ls,0.000744819641113
+ls,0.000827074050903
+ls,0.000735998153687
+ls,0.000845193862915
+ls,0.000866174697876
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000713109970093
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000671863555908
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000228881835938
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000972986221313
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000860929489136
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000658988952637
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.000645160675049
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time /usr/bin/ls,0.00111603736877
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00130081177
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00141000748
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00168609619
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00147294998
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00153207779
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00148296356
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00155591965
+/usr/bin/time -f elapsed_s\\,user_s\\,sys_s\n%e\\,%U\\,%S -o time sleep 2,2.00154995918
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000718832015991
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.00068998336792
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000679016113281
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.00288605690002
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000677824020386
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.00155591964722
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000714063644409
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time /usr/bin/ls,0.000715970993042
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time ls,0.00165820121765
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time ls,0.00163197517395
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time ls,0.00362277030945
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time ls,0.00176787376404
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time ls,0.00172591209412
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time ls,0.00208401679993
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time ls,0.00163507461548
+/usr/bin/time -f elapsed_s\,user_s\,sys_sn%e\,%U\,%S -o time ls,0.00183081626892
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00190901756287
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00161695480347
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00376915931702
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00163602828979
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00446391105652
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00160503387451
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00233483314514
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00159597396851
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00181412696838
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00161004066467
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00171494483948
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00387787818909
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00162792205811
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00172090530396
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164604187012
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0016930103302
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00178599357605
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00162696838379
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00187993049622
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00260996818542
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00165605545044
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00169706344604
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00166201591492
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00161099433899
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00163793563843
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00165796279907
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00188517570496
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00388503074646
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00191712379456
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00171804428101
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00165891647339
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00197100639343
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00175285339355
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00166702270508
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00199007987976
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00194215774536
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00156497955322
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00146198272705
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168704986572
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00141000747681
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168395042419
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00179100036621
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168085098267
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00195693969727
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00176906585693
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00162506103516
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00195693969727
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00163316726685
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168800354004
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00177502632141
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00167202949524
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00182008743286
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00154113769531
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0016508102417
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0019519329071
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00192499160767
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0016770362854
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00176191329956
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00159597396851
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00175499916077
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00172185897827
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00170707702637
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00197291374207
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00160980224609
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00185108184814
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00221014022827
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00169110298157
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00162696838379
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00204992294312
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00154805183411
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00171113014221
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00158381462097
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00188183784485
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00156188011169
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0017249584198
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00161290168762
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00192189216614
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0016450881958
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0018138885498
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00196290016174
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00156593322754
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00171995162964
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0017249584198
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00166583061218
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00271105766296
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00163793563843
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00167894363403
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0019998550415
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00151681900024
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00172710418701
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00177407264709
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00153493881226
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00193405151367
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00162601470947
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00161790847778
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00184297561646
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00161981582642
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00171494483948
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00155901908875
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00177407264709
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00177311897278
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00158309936523
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00162816047668
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0020740032196
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00153994560242
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00155305862427
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00179696083069
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00167202949524
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0014488697052
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00180697441101
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00171494483948
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164484977722
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00213408470154
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00146698951721
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.001629114151
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00169396400452
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00199007987976
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00170207023621
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0016930103302
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00211310386658
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00141096115112
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00218319892883
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00179982185364
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00175595283508
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00163793563843
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00178718566895
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00167798995972
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00162696838379
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00214600563049
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00157380104065
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00151991844177
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168108940125
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00169706344604
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00230002403259
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164008140564
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168585777283
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00204300880432
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00156378746033
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00169992446899
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164890289307
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00180387496948
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00163817405701
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00169587135315
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00176095962524
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00175404548645
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00170588493347
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00179219245911
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00167989730835
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00173401832581
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00161600112915
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164890289307
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0016930103302
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168991088867
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00170207023621
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00176215171814
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00165700912476
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00202202796936
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00166392326355
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00166702270508
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00188207626343
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00170111656189
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00170493125916
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00173902511597
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00183200836182
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164699554443
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00171208381653
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00180220603943
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00172209739685
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00151896476746
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164389610291
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00174784660339
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00181293487549
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00155305862427
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0015869140625
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00172519683838
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00171089172363
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00169396400452
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00159811973572
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.0199379920959
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00170397758484
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00138998031616
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00145292282104
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00144910812378
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00144004821777
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00146389007568
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00152397155762
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00173091888428
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00165295600891
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0017831325531
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.001708984375
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00156497955322
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00150799751282
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168395042419
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00167989730835
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00166487693787
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00156092643738
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.0014488697052
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00161695480347
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00157713890076
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00144815444946
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00141191482544
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00127696990967
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00173020362854
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164008140564
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00176692008972
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168991088867
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00167894363403
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168490409851
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00157713890076
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168704986572
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00151109695435
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00138878822327
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00143694877625
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00148606300354
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00146102905273
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00131511688232
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00120306015015
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00137805938721
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00173711776733
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00163602828979
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00158214569092
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00167894363403
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00170302391052
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00194096565247
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00169897079468
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164890289307
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.0015230178833
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00157189369202
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00170803070068
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00131988525391
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00144815444946
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00169396400452
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00147700309753
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00145602226257
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00178003311157
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00169801712036
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00172591209412
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164604187012
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00195717811584
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00170087814331
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00172901153564
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00199508666992
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.0255749225616
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00152277946472
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00143003463745
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00153398513794
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00169587135315
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00138401985168
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00147700309753
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00141596794128
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00181102752686
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00164413452148
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00173902511597
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00165390968323
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00168013572693
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0017249584198
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00155782699585
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00171089172363
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00147914886475
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00146794319153
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00156784057617
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00149297714233
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00149011611938
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00168895721436
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00168514251709
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00153183937073
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00165581703186
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00178098678589
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00175309181213
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00187492370605
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00165510177612
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00194501876831
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00172710418701
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00179886817932
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00156116485596
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00161290168762
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00156307220459
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00148606300354
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00153708457947
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.0022349357605
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00124001502991
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00347089767456
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00169086456299
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00171494483948
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0019211769104
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00187706947327
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.0050950050354
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00209498405457
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00173306465149
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00162100791931
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00151991844177
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.0014328956604
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00158405303955
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00151705741882
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00179386138916
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00134801864624
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00159883499146
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00204491615295
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00243282318115
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00194191932678
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00613903999329
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00213217735291
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00183510780334
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00145506858826
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00191497802734
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time ls,0.00161504745483
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00153779983521
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00171995162964
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00153613090515
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00376200675964
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00157308578491
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00148797035217
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.0014500617981
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\n%e\,%U\,%S -o time who,0.00179719924927

@@ -2,8 +2,9 @@
 #to be used in state_* kind of dir.
 #ignores files containing "."
 
-header=$(mktemp)
 args=$@
+header=$(mktemp)
+
 for arg in $args; do
     printf $(basename $arg),
 done > $header
