@@ -96,7 +96,7 @@ def addCmdTimeToFile(file_path, cmd_name, time):
     with open(file_path, "a") as times_file:
         times_file.write(",".join((cmd_name.replace(",","\,"), str(time))) + os.linesep)
 
-def getRunDirName(fmt="baut_run_%d-%m-%Y_%H:%M:%S"):
+def getRunDirName(fmt="baut_run_%d-%m-%Y_%H-%M-%S"):
     return time.strftime(fmt, time.gmtime())
 
 def getCmdUniqueName(cmd_name, hash_size=8):
@@ -182,7 +182,7 @@ def run():
             error("unknown system state '%s' in file '%s'" % (name, states_path.val))
 
     #creating run directory
-    run_dir = os.path.join(run_dir.val, getRunDirName())
+    run_dir = os.path.abspath(os.path.join(run_dir.val, getRunDirName()))
     if not os.path.exists(run_dir):
         os.makedirs(run_dir)
     info("storing execution information in '%s'" % run_dir)
@@ -322,7 +322,6 @@ def extract():
     else:
         base_dir = os.path.abspath(run_dir.val)
         states_dirs = [""]
-        print base_dir, states_dirs
 
     #main loop
     for state_dir in states_dirs:

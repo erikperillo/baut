@@ -60,7 +60,9 @@ def main():
     header = True if col_names.found else has_header.val
 
     #creating table
-    table = tb.Table(input_filename.val, header=header)
+    filename = os.path.abspath(input_filename.val)
+    print input_filename.val
+    table = tb.Table(filename, header=header)
 
     #defining specifier
     if all_cols.val:
