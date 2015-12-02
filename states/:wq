@@ -1,0 +1,29 @@
+command,iterations,autonuma
+#NPB
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/NPB2.3-omp-C/bin/mg.C,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/NPB2.3-omp-C/bin/cg.C,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/NPB2.3-omp-C/bin/ep.C,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/NPB2.3-omp-C/bin/bt.C,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/NPB2.3-omp-C/bin/lu.C,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/NPB2.3-omp-C/bin/ft.C,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/NPB2.3-omp-C/bin/sp.C,8,0
+#splash2x
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.barnes -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.cholesky -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.fft -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.fmm -a run -n 64 -i nativ:,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.lu_cb -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.lu_ncb -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.ocean_cp -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.ocean_ncp -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.radiosity -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.radix -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.raytrace -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.volrend -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.water_nsquared -a run -n 64 -i native,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/parsec-3.0/bin/parsecmgmt -p splash2x.water_spatial -a run -n 64 -i native,8,0
+#e-A asy
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/tests/easy/bin/easy_add,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/tests/easy/bin/easy_prod,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/tests/easy/bin/easy_ch,8,0
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time perf stat -e r20000530323 -a -A -c -o perf-stat-out -x\, /local/erik/tests/easy/bin/easy_lu,8,0

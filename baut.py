@@ -121,6 +121,8 @@ def run():
     vars_path = oarg.Oarg("-v --vars", os.path.join(file_dir, "vars", "vars.csv"), 
                           "vars .csv file path")
     states_path = oarg.Oarg("-s --states", "", "rounds states .csv file path")
+    num_its = oarg.Oarg("-i --iterations", 0, "number of iterations (overrides " +
+                                              "the number in the states file")
     run_dir = oarg.Oarg("-d --run-dir", os.path.join(file_dir, "runs"), 
                         "directory to store results")
     times_file = oarg.Oarg("-t --times-file", os.path.join(file_dir, "times.csv"), 
@@ -231,9 +233,13 @@ def run():
         
         wall_times = []
         files = []
+
+        #overriding iterations if needed
+        iterations = range(num_its.val) if num_its.found else range(int(state["iterations"]))
+
         #command loop
-        for k in xrange(int(state["iterations"])):
-            info("\trunning iteration %d out of %d ..." % (k+1, int(state["iterations"])),
+        for k in iterations:
+            info("\trunning iteration %d out of %d ..." % (k+1, len(iterations)),
                   newline=False)
             #creating process
             process = sp.Popen(command, stdout=sp.PIPE, stderr=sp.PIPE)    
