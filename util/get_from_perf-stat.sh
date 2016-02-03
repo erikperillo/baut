@@ -44,7 +44,7 @@ if $cpu_groups; then
     cpu_pattern="CPU"$((node_num*cpus_per_node))
     grep -A$cpus_per_node $cpu_pattern $file > $target
 else
-    col=1
+    col=2
     target=$file
 fi
 

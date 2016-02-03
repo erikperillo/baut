@@ -30,5 +30,11 @@ class SystemState(object):
     def val(self, value):
         """the setter must be something (eg. shell script) that takes value as first argument.
            value: * (will be converted to string)"""
+        print "lol"
         proc = sp.Popen(self.setter + [str(value)], stdout=sp.PIPE, stderr=sp.PIPE)
-        proc.wait()
+        #proc.wait()
+        out, err = proc.communicate()
+        print "out: %s" % out
+        print "err: %s" % err
+        print "flw"
+        proc = sp.Popen(self.setter + [str(value)], stdout=sp.PIPE, stderr=sp.PIPE)
