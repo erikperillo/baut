@@ -217,13 +217,13 @@ def run():
         info("vars configuration:")
         for name in [key for key, val in state.iteritems() if not key in special_names and val]:
             info("\tsetting %s = %s ..." % (name, state[name]), newline=False)
-            variables[name].val = state[name]
+            variables[name] = state[name]
             print "done" 
 
         #creating state file
         with open("state.csv", "w") as state_file:
             state_file.write(",".join(states_descr) + os.linesep)
-            state_file.write(",".join(state[key] if key in special_names else variables[key].val \
+            state_file.write(",".join(state[key] if key in special_names else variables[key] \
                                       for key in states_descr) + os.linesep)
 
         #creating command
