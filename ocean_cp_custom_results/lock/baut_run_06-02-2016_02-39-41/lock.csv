@@ -1,0 +1,4 @@
+suite,name,autonuma,interleave,time_elapsed_mean,time_elapsed_ci
+splash2x,ocean_cp,0,0,88.60125,0.467385928711
+splash2x,ocean_cp,1,0,35.18625,0.684700520693
+splash2x,ocean_cp,0,1,26.81375,0.136130436345

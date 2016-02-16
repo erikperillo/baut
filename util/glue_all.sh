@@ -9,8 +9,8 @@ for d in $dir/state_*; do
 
 	#creating col with suite
 	suite_with_header=$(mktemp)
-	echo "suite,name" > $suite_with_header
-	suite_and_name=$(cat $d/results/suite),$(cat $d/results/name)
+	echo "suite,name,autonuma,interleave" > $suite_with_header
+	suite_and_name=$(cat $d/results/suite),$(cat $d/results/name),$(cat $d/results/auto_numa),$(cat $d/results/interleave)
 	echo $suite_and_name >> $suite_with_header
 
 	if ! $header_got; then

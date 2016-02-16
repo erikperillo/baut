@@ -41,10 +41,10 @@ if $cpu_groups; then
     target=$(mktemp)
     node_num=$(echo $2 | tail -c +3)
     #assuming number of cores is 8 per node
-    cpu_pattern="CPU"$((node_num*cpus_per_node))
+    cpu_pattern="CPU"$((node_num*0))
     grep -A$cpus_per_node $cpu_pattern $file > $target
 else
-    col=1
+    col=2
     target=$file
 fi
 

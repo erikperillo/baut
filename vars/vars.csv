@@ -1,5 +1,7 @@
 name,getter,setter,file_pattern
 autonuma,util/get_autonuma.sh,util/set_autonuma.sh,,
+auto_numa,util/det_autonuma.sh,,state.csv
+interleave,util/det_interleave.sh,,state.csv
 time_elapsed,util/get_time.sh elapsed,,time*
 time_user,util/get_time.sh user,,time*
 time_sys,util/get_time.sh sys,,time*

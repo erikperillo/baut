@@ -1,0 +1,3 @@
+command,iterations,autonuma
+/usr/bin/time -f elapsed_s\,user_s\,sys_s\\n%e\,%U\,%S -o time numactl --interleave=all /local/erik/ocean_cp_custom/run_ocean_cp.sh nolock,16,0
+
