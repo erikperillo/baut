@@ -12,16 +12,17 @@ get_mem_acc_events()
 }
 
 run_dir=$1
-#measures="time_elapsed instructions cycles stalled-cycles-backend lsq_load lsq_store"
+states_file=$2
+measures="time_elapsed instructions "$(get_mem_acc_events)
 #measures="lsq_load_store_node_0 lsq_load_store_node_1 lsq_load_store_node_2 lsq_load_store_node_3 lsq_load_store_node_4 lsq_load_store_node_5 lsq_load_store_node_6 lsq_load_store_node_7"
-measures="time_elapsed"
 
 #running
-#echo "[run_extract_resume.sh] running ..."
-#./baut.py run -s states/states.csv -d $run_dir -i 64
+echo "[run_extract_resume.sh] running ..."
+./baut.py run -s states/$states_file -d $run_dir 
 
 #selecting most recent dir
 #dir=runs/capped #$run_dir/$(ls -t $run_dir | head -n 1)
+dir=$run_dir/$(ls -t $run_dir | head -n 1)
 
 dir=$run_dir
 #extracting
